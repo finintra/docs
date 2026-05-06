@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Тюнінг Claude Code — посібник для початківця</title>
-<meta name="description" content="Простий гід світом плагінів і скілів Claude Code. 17 інструментів, відсортованих за популярністю на GitHub.">
+<meta name="description" content="Простий гід світом плагінів, скілів, MCP-серверів і CLI Claude Code. Відсортовано за популярністю на GitHub.">
 <style>
   :root {
     --bg: #0f0f14;
@@ -333,6 +333,17 @@
     font-size: 0.9rem;
   }
 
+  .compare-block {
+    background: linear-gradient(135deg, rgba(255, 122, 89, 0.06), rgba(96, 165, 250, 0.04));
+    border: 1px solid rgba(255, 122, 89, 0.2);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+  .compare-block strong { color: var(--accent); }
+  .compare-block ul { padding-left: 22px; color: var(--text-dim); margin-top: 6px; }
+  .compare-block ul li { margin-bottom: 4px; }
+
   .recommendation {
     background: linear-gradient(135deg, rgba(255, 122, 89, 0.1), rgba(192, 132, 252, 0.05));
     border: 1px solid rgba(255, 122, 89, 0.3);
@@ -394,6 +405,73 @@
     font-size: 0.8rem;
   }
 
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .resource-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .resource-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .resource-card-title {
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .resource-card-title a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .resource-card-title a:hover { color: var(--accent); }
+  .resource-card-stars {
+    color: var(--gold);
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .resource-card-desc {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+  }
+
+  .mini-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .mini-card:hover { border-color: var(--accent); }
+  .mini-card h4 {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .mini-card h4 a { color: var(--text); text-decoration: none; }
+  .mini-card h4 a:hover { color: var(--accent); }
+  .mini-card h4 .stars-mini {
+    background: rgba(255, 200, 87, 0.15);
+    color: var(--gold);
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .mini-card p { color: var(--text-dim); font-size: 0.92rem; margin-bottom: 8px; }
+  .mini-card pre { font-size: 0.82rem; padding: 12px; }
+
   footer {
     text-align: center;
     padding: 60px 20px 40px;
@@ -418,14 +496,14 @@
   <section class="hero">
     <span class="hero-badge">📘 Посібник для початківця</span>
     <h1>Тюнінг Claude Code</h1>
-    <p>Простий гід світом плагінів і скілів — без жаргону, без занурення в код. Лише те, що допоможе вам зрозуміти, що це таке і навіщо воно потрібне.</p>
+    <p>Простий гід світом плагінів, скілів, MCP-серверів і CLI — без жаргону, без занурення в код. Лише те, що допоможе вам зрозуміти, що це таке і навіщо воно потрібне.</p>
     <div class="hero-stats">
       <div class="hero-stat">
-        <div class="hero-stat-num">17</div>
+        <div class="hero-stat-num">16</div>
         <div class="hero-stat-label">Плагінів</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-num">925K+</div>
+        <div class="hero-stat-num">1M+</div>
         <div class="hero-stat-label">Зірок ⭐</div>
       </div>
       <div class="hero-stat">
@@ -444,7 +522,7 @@
       <div class="def">
         <div class="def-icon">🎯</div>
         <div class="def-name">Скіл (Skill)</div>
-        <div class="def-desc">Спеціальна навичка — автоматично «вмикається», коли Claude бачить релевантну задачу. Як знати про мікроволновку, коли треба розігріти їжу.</div>
+        <div class="def-desc">Спеціальна навичка — автоматично «вмикається», коли Claude бачить релевантну задачу.</div>
       </div>
       <div class="def">
         <div class="def-icon">🔌</div>
@@ -452,20 +530,20 @@
         <div class="def-desc">Пакет з кількох скілів і команд. Зазвичай має тематику (дизайн, документи, веб-доступ).</div>
       </div>
       <div class="def">
-        <div class="def-icon">🏪</div>
-        <div class="def-name">Маркетплейс</div>
-        <div class="def-desc">Сторінка-каталог, з якої можна встановлювати плагіни. Як App Store, але для Claude.</div>
+        <div class="def-icon">🛰️</div>
+        <div class="def-name">MCP-сервер</div>
+        <div class="def-desc">Окрема програма, що дає Claude нові «руки» — підключення до зовнішнього сервісу (Notion, Telegram, Google).</div>
       </div>
       <div class="def">
         <div class="def-icon">⚡</div>
-        <div class="def-name">Слеш-команда</div>
-        <div class="def-desc">Команда, що починається з <code>/</code> — наприклад, <code>/review</code>. Швидкий спосіб запустити скіл вручну.</div>
+        <div class="def-name">CLI</div>
+        <div class="def-desc">Утиліта в терміналі (наприклад, <code>gh</code>), якою Claude користується через Bash. Часто пара до плагіна.</div>
       </div>
     </div>
   </section>
 
   <section class="toc">
-    <h3>📋 Зміст (за популярністю)</h3>
+    <h3>📋 Зміст</h3>
     <div class="toc-grid">
       <a href="#p1"><span class="toc-num">1.</span> Superpowers <span class="toc-stars">⭐ 180k</span></a>
       <a href="#p2"><span class="toc-num">2.</span> Anthropic Skills <span class="toc-stars">⭐ 128k</span></a>
@@ -475,15 +553,17 @@
       <a href="#p6"><span class="toc-num">6.</span> UI/UX Pro Max <span class="toc-stars">⭐ 74k</span></a>
       <a href="#p7"><span class="toc-num">7.</span> Claude Memory <span class="toc-stars">⭐ 73k</span></a>
       <a href="#p8"><span class="toc-num">8.</span> Context7 <span class="toc-stars">⭐ 55k</span></a>
-      <a href="#p9"><span class="toc-num">9.</span> Chrome DevTools MCP <span class="toc-stars">⭐ 38k</span></a>
-      <a href="#p10"><span class="toc-num">10.</span> Anthropic Plugins <span class="toc-stars">⭐ 19k</span></a>
-      <a href="#p11"><span class="toc-num">11.</span> Knowledge Work <span class="toc-stars">⭐ 12k</span></a>
-      <a href="#p12"><span class="toc-num">12.</span> Browser Harness <span class="toc-stars">⭐ 11k</span></a>
-      <a href="#p13"><span class="toc-num">13.</span> Community Skills <span class="toc-stars">⭐ 1k</span></a>
-      <a href="#p14"><span class="toc-num">14.</span> Skill Creator <span class="toc-stars">⭐ 855</span></a>
-      <a href="#p15"><span class="toc-num">15.</span> Lazyweb <span class="toc-stars">⭐ 203</span></a>
-      <a href="#p16"><span class="toc-num">16.</span> Telegram Supercharged <span class="toc-stars">⭐ 98</span></a>
-      <a href="#p17"><span class="toc-num">17.</span> Caveman <span class="toc-stars">⭐ 62</span></a>
+      <a href="#p9"><span class="toc-num">9.</span> Anthropic Plugins <span class="toc-stars">⭐ 19k</span></a>
+      <a href="#p10"><span class="toc-num">10.</span> Knowledge Work <span class="toc-stars">⭐ 12k</span></a>
+      <a href="#p11"><span class="toc-num">11.</span> Browser Harness <span class="toc-stars">⭐ 11k</span></a>
+      <a href="#p12"><span class="toc-num">12.</span> Community Skills <span class="toc-stars">⭐ 1k</span></a>
+      <a href="#p13"><span class="toc-num">13.</span> Skill Creator <span class="toc-stars">⭐ 855</span></a>
+      <a href="#p14"><span class="toc-num">14.</span> Lazyweb <span class="toc-stars">⭐ 203</span></a>
+      <a href="#p15"><span class="toc-num">15.</span> Telegram Supercharged <span class="toc-stars">⭐ 98</span></a>
+      <a href="#p16"><span class="toc-num">16.</span> Caveman <span class="toc-stars">⭐ 62</span></a>
+      <a href="#mcps"><span class="toc-num">🛰️</span> MCP-сервери</a>
+      <a href="#clis"><span class="toc-num">⌨️</span> CLI-інструменти</a>
+      <a href="#marketplaces"><span class="toc-num">🌐</span> Маркетплейси для пошуку</a>
       <a href="#recommendation"><span class="toc-num">⚡</span> Рекомендований стек</a>
     </div>
   </section>
@@ -521,7 +601,7 @@
       <span class="meta-pill auto">🟢 Працює автоматично</span>
       <span class="meta-pill">obra/superpowers</span>
     </div>
-    <p class="plugin-desc">Це найпопулярніший фреймворк скілів від відомого розробника Jesse Vincent. Він буквально перевизначає те, як Claude підходить до завдань: спочатку обдумати, потім написати план, перевірити перед тим як казати «готово».</p>
+    <p class="plugin-desc">Найпопулярніший фреймворк скілів від відомого розробника Jesse Vincent. Перевизначає те, як Claude підходить до завдань: спочатку обдумати, потім написати план, перевірити перед тим як казати «готово».</p>
     <p class="plugin-desc">Скіл містить десятки міні-скілів — як дисциплінарний кодекс. Брейнштормінг перед фічею, обов'язкове тестування, систематичний дебаг, верифікація командами замість порожніх обіцянок. Якщо хочете щоб Claude робив роботу серйозно — ставте першим.</p>
     <div class="install-block">
       <div class="install-block-label">📥 Встановлення</div>
@@ -590,6 +670,7 @@
       <ul class="commands-list">
         <li><code>/init</code><span class="cmd-desc">Створити CLAUDE.md з правилами проєкту</span></li>
         <li><code>/plugin</code><span class="cmd-desc">Керування плагінами</span></li>
+        <li><code>/mcp</code><span class="cmd-desc">Керування MCP-серверами</span></li>
         <li><code>/help</code><span class="cmd-desc">Довідник усіх команд</span></li>
         <li><code>/cost</code><span class="cmd-desc">Скільки токенів витрачено</span></li>
         <li><code>/clear</code><span class="cmd-desc">Очистити контекст сесії</span></li>
@@ -611,7 +692,7 @@
       <span class="meta-pill auto">🟢 Працює автоматично</span>
       <span class="meta-pill">firecrawl/firecrawl-mcp-server</span>
     </div>
-    <p class="plugin-desc">Найпотужніший інструмент для роботи з інтернетом. Дає Claude можливість шукати в реальному часі, читати сторінки повністю (навіть динамічні JavaScript-сайти), завантажувати цілі розділи документації, заходити на сторінки з логінами.</p>
+    <p class="plugin-desc">Найпотужніший інструмент для роботи з інтернетом. Дає Claude можливість шукати в реальному часі, читати сторінки повністю (навіть динамічні JavaScript-сайти), завантажувати цілі розділи документації.</p>
     <p class="plugin-desc">Якщо ви скажете «знайди мені статті про X» або «скрапни цю сторінку» — Claude автоматично використає Firecrawl. Це ніби дати помічнику справжній браузер замість обмеженого пошуку.</p>
     <div class="install-block">
       <div class="install-block-label">📥 Встановлення</div>
@@ -627,25 +708,25 @@
       <div class="plugin-icon">🎭</div>
       <div class="plugin-title-block">
         <div class="plugin-name"><a href="https://github.com/microsoft/playwright" target="_blank">Playwright</a></div>
-        <div class="plugin-stars">⭐ 88 000 зірок (фреймворк) + 32k MCP</div>
+        <div class="plugin-stars">⭐ 88 000 зірок</div>
       </div>
     </div>
-    <div class="plugin-tagline">Браузерна автоматизація від Microsoft — найточніший контроль сторінок</div>
+    <div class="plugin-tagline">Браузерна автоматизація від Microsoft — точний контроль через скрипти</div>
     <div class="plugin-meta">
-      <span class="meta-pill cmd">🔵 Через MCP</span>
-      <span class="meta-pill">microsoft/playwright + microsoft/playwright-mcp</span>
+      <span class="meta-pill cmd">🔵 Через MCP / CLI</span>
+      <span class="meta-pill">microsoft/playwright</span>
     </div>
-    <p class="plugin-desc">Промисловий стандарт для тестування і автоматизації веб-сторінок. Дозволяє Claude управляти Chromium, Firefox і WebKit через єдиний API: клікати, заповнювати форми, робити скріншоти, чекати на завантаження, перевіряти стан сторінок з мікросекундною точністю.</p>
-    <p class="plugin-desc">Через офіційний MCP-сервер Microsoft Playwright інтегрується прямо в Claude Code — і помічник може писати/запускати end-to-end тести, скрейпити сторінки з повним рендером, автоматизувати вхід у сервіси. На відміну від простих скрейперів, Playwright бачить сторінку точно як справжній користувач.</p>
+    <p class="plugin-desc">Промисловий стандарт для тестування і автоматизації веб-сторінок. Дозволяє Claude управляти Chromium, Firefox і WebKit через єдиний API: клікати, заповнювати форми, робити скріншоти, чекати на завантаження, перевіряти стан сторінок.</p>
+    <p class="plugin-desc">На відміну від Browser Harness, Playwright запускає <em>свій</em> ізольований браузер. Найкраще пасує коли потрібно: писати E2E-тести (з повторюваним результатом), скрейпити публічні сторінки, генерувати скріншоти для документації, автоматизувати на CI/CD без головного браузера користувача.</p>
     <div class="install-block">
       <div class="install-block-label">📥 Встановлення</div>
-<pre><code># Через офіційний маркетплейс Anthropic (external_plugins):
+<pre><code># Через офіційний маркетплейс Anthropic:
 /plugin install playwright
 
 # Або як CLI глобально:
 npm install -g @playwright/cli</code></pre>
     </div>
-    <div><strong>Як використовувати:</strong> «протестуй цю форму у браузері», «зроби E2E тест для логіну», «перевір що сторінка відкривається у мобільному вигляді».</div>
+    <div><strong>Як використовувати:</strong> «протестуй цю форму», «зроби E2E тест для логіну», «перевір що сторінка відкривається у мобільному вигляді», «зроби скріншот сторінки X».</div>
   </article>
 
   <article class="plugin" id="p6">
@@ -729,30 +810,6 @@ npm install -g @playwright/cli</code></pre>
   <article class="plugin" id="p9">
     <div class="plugin-rank">9</div>
     <div class="plugin-header">
-      <div class="plugin-icon">🔧</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/ChromeDevTools/chrome-devtools-mcp" target="_blank">Chrome DevTools MCP</a></div>
-        <div class="plugin-stars">⭐ 38 000 зірок</div>
-      </div>
-    </div>
-    <div class="plugin-tagline">Офіційні Chrome DevTools для AI — від команди Google Chrome</div>
-    <div class="plugin-meta">
-      <span class="meta-pill cmd">🔵 Через MCP</span>
-      <span class="meta-pill">ChromeDevTools/chrome-devtools-mcp</span>
-    </div>
-    <p class="plugin-desc">Офіційний MCP-сервер від команди Google Chrome. Дає Claude доступ до тих самих DevTools, якими користуються розробники у браузері: інспекція DOM, console-логи, network-запити, performance-метрики, profiling, debugger.</p>
-    <p class="plugin-desc">Незамінний коли треба зрозуміти чому сайт повільний, чому форма не сабміттиться, які запити йдуть до API, які JS-помилки виникають у консолі. Claude може відкрити DevTools, відтворити баг, проаналізувати network waterfall — все автоматично.</p>
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
-<pre><code># Додати MCP-сервер у конфіг Claude Code:
-claude mcp add chrome-devtools npx chrome-devtools-mcp@latest</code></pre>
-    </div>
-    <div><strong>Як використовувати:</strong> «подивись чому ця сторінка повільна», «які помилки в консолі», «перевір network requests до API», «зроби performance trace».</div>
-  </article>
-
-  <article class="plugin" id="p10">
-    <div class="plugin-rank">10</div>
-    <div class="plugin-header">
       <div class="plugin-icon">🏛️</div>
       <div class="plugin-title-block">
         <div class="plugin-name"><a href="https://github.com/anthropics/claude-plugins-official" target="_blank">Anthropic Plugins (Official)</a></div>
@@ -805,8 +862,8 @@ claude mcp add chrome-devtools npx chrome-devtools-mcp@latest</code></pre>
     </div>
   </article>
 
-  <article class="plugin" id="p11">
-    <div class="plugin-rank">11</div>
+  <article class="plugin" id="p10">
+    <div class="plugin-rank">10</div>
     <div class="plugin-header">
       <div class="plugin-icon">💼</div>
       <div class="plugin-title-block">
@@ -833,8 +890,8 @@ claude mcp add chrome-devtools npx chrome-devtools-mcp@latest</code></pre>
     </div>
   </article>
 
-  <article class="plugin" id="p12">
-    <div class="plugin-rank">12</div>
+  <article class="plugin" id="p11">
+    <div class="plugin-rank">11</div>
     <div class="plugin-header">
       <div class="plugin-icon">🌐</div>
       <div class="plugin-title-block">
@@ -842,42 +899,96 @@ claude mcp add chrome-devtools npx chrome-devtools-mcp@latest</code></pre>
         <div class="plugin-stars">⭐ 11 000 зірок</div>
       </div>
     </div>
-    <div class="plugin-tagline">Прямий контроль вашого Chrome — як телепортуватися в браузер</div>
+    <div class="plugin-tagline">Прямий контроль вашого Chrome — без логінів і авторизацій</div>
     <div class="plugin-meta">
-      <span class="meta-pill cmd">🔵 Через команди</span>
+      <span class="meta-pill cmd">🔵 Через CLI</span>
       <span class="meta-pill">browser-use/browser-harness</span>
     </div>
     <p class="plugin-desc">Дозволяє Claude управляти вашим живим Chrome — кликати кнопки, заповнювати форми, робити скріншоти, читати сторінки за вашими логінами. Не запускає окремий браузер — підключається до того, що вже відкрито.</p>
-    <p class="plugin-desc">Корисно коли потрібно автоматизувати рутину в авторизованих сервісах: «зайди в мою адмінку і витягни список продажів», «заповни цю довгу форму». Працює на рівні браузера, тож не вимагає API.</p>
+    <p class="plugin-desc">Корисно коли потрібно автоматизувати рутину в авторизованих сервісах: «зайди в мою адмінку і витягни список продажів», «заповни цю довгу форму», «зроби expert-режим у Notion». Працює на рівні браузера, тож не вимагає API.</p>
+
+    <div class="compare-block">
+      <strong>🤔 Playwright vs Browser Harness — коли що використовувати?</strong>
+      <ul>
+        <li><strong>Playwright</strong> — коли потрібен <em>стабільний скрипт</em>: тести, скрейпери на CI, повторювані операції на чистому браузері.</li>
+        <li><strong>Browser Harness</strong> — коли потрібен <em>живий контроль</em>: робота в авторизованих сервісах (адмінки, банки, корпоративні портали), де ви вже залогінені у своєму Chrome.</li>
+      </ul>
+      <p style="margin-top: 8px; color: var(--text-dim); font-size: 0.9rem;">💡 Просте правило: треба ввести логін і пароль? — Browser Harness. Треба написати тест? — Playwright.</p>
+    </div>
+
     <div class="install-block">
       <div class="install-block-label">📥 Встановлення</div>
 <pre><code># Інструкція в репозиторії — встановлюється як CLI</code></pre>
     </div>
   </article>
 
-  <article class="plugin" id="p13">
-    <div class="plugin-rank">13</div>
+  <article class="plugin" id="p12">
+    <div class="plugin-rank">12</div>
     <div class="plugin-header">
       <div class="plugin-icon">👥</div>
       <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/daymade/claude-code-skills" target="_blank">Community Skills</a></div>
+        <div class="plugin-name"><a href="https://github.com/daymade/claude-code-skills" target="_blank">Community Skills (daymade)</a></div>
         <div class="plugin-stars">⭐ 1 000 зірок</div>
       </div>
     </div>
-    <div class="plugin-tagline">Збірка скілів від спільноти — те, чого немає в офіційному маркетплейсі</div>
+    <div class="plugin-tagline">~50 production-готових скілів від спільноти</div>
     <div class="plugin-meta">
       <span class="meta-pill">daymade/claude-code-skills</span>
     </div>
-    <p class="plugin-desc">Спільнотний маркетплейс зі скілами для production-розробки: Architecture Decision Records, DevOps автоматизація, ClickHouse management, semantic versioning, продуктивність. Якщо стандартних плагінів не вистачає — варто заглянути сюди.</p>
+    <p class="plugin-desc">Найбільший community-маркетплейс з конкретними скілами під щоденні задачі — те, чого немає в офіційному. Замість загальних дисциплінарних скілів — вузькоспеціалізовані помічники.</p>
+
+    <div class="sub-skill">
+      <div class="sub-skill-name">📊 excel-automation</div>
+      <div class="sub-skill-desc">Автоматизація Excel-задач: формули, зведені таблиці, очистка даних, побудова графіків.</div>
+    </div>
+    <div class="sub-skill">
+      <div class="sub-skill-name">🐙 github-ops</div>
+      <div class="sub-skill-desc">Робота з GitHub — issues, PR, релізи, GitHub Actions, безпечні merge-стратегії.</div>
+    </div>
+    <div class="sub-skill">
+      <div class="sub-skill-name">🌐 debugging-network-issues</div>
+      <div class="sub-skill-desc">Дебаг мережі — DNS, TCP, HTTP, латентність, втрати пакетів. Аналізує traceroute і curl.</div>
+    </div>
+    <div class="sub-skill">
+      <div class="sub-skill-name">🔬 deep-research</div>
+      <div class="sub-skill-desc">Глибокий дослідницький звіт з кількох джерел — для маркет-аналізу, конкурентної розвідки, технічних оглядів.</div>
+    </div>
+    <div class="sub-skill">
+      <div class="sub-skill-name">🎤 slides-creator</div>
+      <div class="sub-skill-desc">Презентації під ключ — структура, наратив, дизайн слайдів, експорт у PPTX/PDF.</div>
+    </div>
+    <div class="sub-skill">
+      <div class="sub-skill-name">✨ prompt-optimizer</div>
+      <div class="sub-skill-desc">Покращення ваших промптів для кращих результатів від AI-моделей.</div>
+    </div>
+    <div class="sub-skill">
+      <div class="sub-skill-name">🎬 cli-demo-generator</div>
+      <div class="sub-skill-desc">Створення анімованих демо роботи CLI-утиліт для README і документації.</div>
+    </div>
+    <div class="sub-skill">
+      <div class="sub-skill-name">🌍 i18n-expert</div>
+      <div class="sub-skill-desc">Інтернаціоналізація — переклади, RTL-розкладка, формати дат і чисел, плюрали.</div>
+    </div>
+    <div class="sub-skill">
+      <div class="sub-skill-name">☁️ cloudflare-troubleshooting</div>
+      <div class="sub-skill-desc">Дебаг Cloudflare — Workers, Pages, KV, R2, DNS, security rules.</div>
+    </div>
+    <div class="sub-skill">
+      <div class="sub-skill-name">🔍 fact-checker</div>
+      <div class="sub-skill-desc">Перевірка фактів у документах через крос-референси з кількох джерел.</div>
+    </div>
+
     <div class="install-block">
       <div class="install-block-label">📥 Встановлення</div>
 <pre><code>/plugin marketplace add daymade/claude-code-skills
-/plugin install &lt;ім'я-скіла&gt;@daymade</code></pre>
+/plugin install excel-automation@daymade
+/plugin install github-ops@daymade
+# тощо — повний список у репозиторії</code></pre>
     </div>
   </article>
 
-  <article class="plugin" id="p14">
-    <div class="plugin-rank">14</div>
+  <article class="plugin" id="p13">
+    <div class="plugin-rank">13</div>
     <div class="plugin-header">
       <div class="plugin-icon">🤖</div>
       <div class="plugin-title-block">
@@ -900,8 +1011,8 @@ claude mcp add chrome-devtools npx chrome-devtools-mcp@latest</code></pre>
     <div><strong>Як використовувати:</strong> скажіть «створи мені скіл для…» або «автоматизуй цей процес».</div>
   </article>
 
-  <article class="plugin" id="p15">
-    <div class="plugin-rank">15</div>
+  <article class="plugin" id="p14">
+    <div class="plugin-rank">14</div>
     <div class="plugin-header">
       <div class="plugin-icon">🖼️</div>
       <div class="plugin-title-block">
@@ -924,8 +1035,8 @@ claude mcp add chrome-devtools npx chrome-devtools-mcp@latest</code></pre>
     <div><strong>Як використовувати:</strong> «покращ цей дизайн», «покажи приклади onboarding», «як це робить Spotify».</div>
   </article>
 
-  <article class="plugin" id="p16">
-    <div class="plugin-rank">16</div>
+  <article class="plugin" id="p15">
+    <div class="plugin-rank">15</div>
     <div class="plugin-header">
       <div class="plugin-icon">📱</div>
       <div class="plugin-title-block">
@@ -948,8 +1059,8 @@ claude mcp add chrome-devtools npx chrome-devtools-mcp@latest</code></pre>
     <div><strong>Як налаштувати:</strong> отримайте токен у @BotFather в Telegram, передайте в Claude — далі він проведе через всі кроки.</div>
   </article>
 
-  <article class="plugin" id="p17">
-    <div class="plugin-rank">17</div>
+  <article class="plugin" id="p16">
+    <div class="plugin-rank">16</div>
     <div class="plugin-header">
       <div class="plugin-icon">🪨</div>
       <div class="plugin-title-block">
@@ -979,18 +1090,132 @@ claude mcp add chrome-devtools npx chrome-devtools-mcp@latest</code></pre>
     </div>
   </article>
 
+  <h2 class="section-title" id="mcps">🛰️ MCP-сервери (поза плагінами)</h2>
+  <p style="color: var(--text-dim); margin-bottom: 24px;">MCP-сервер — окрема програма, яку Claude підключає для нових можливостей. Часто йдуть із плагінами, але деякі варто поставити окремо.</p>
+
+  <div class="mini-card">
+    <h4><a href="https://stitch.googleapis.com/" target="_blank">🪡 Stitch (Google)</a> <span class="stars-mini">⭐ Google product</span></h4>
+    <p>Експериментальний MCP від Google для генерації UI-макетів. Скажіть «створи мені дизайн ландінгу для X» — отримаєте структурований макет, який можна одразу імпортувати у Figma або скопіювати у Tailwind-код.</p>
+    <pre><code>claude mcp add stitch https://stitch.googleapis.com/mcp --transport http</code></pre>
+  </div>
+
+  <div class="mini-card">
+    <h4><a href="https://github.com/vredrick/n8n-mcp" target="_blank">🔗 n8n MCP</a> <span class="stars-mini">⭐ workflow automation</span></h4>
+    <p>Підключення до n8n — open-source no-code платформи автоматизації (~95k зірок саме у n8n). Через MCP Claude може створювати, редагувати, запускати ваші workflow: «створи мені ланцюжок: Telegram повідомлення → ChatGPT → запис у Google Sheet».</p>
+    <pre><code>npm install -g n8n-mcp
+claude mcp add n8n npx n8n-mcp</code></pre>
+  </div>
+
+  <div class="mini-card">
+    <h4><a href="https://github.com/modelcontextprotocol/servers" target="_blank">📦 Офіційний реєстр MCP-серверів</a> <span class="stars-mini">⭐ 85 000</span></h4>
+    <p>Колекція офіційних MCP-серверів від команди MCP: <code>memory</code> (вбудована памʼять), <code>filesystem</code>, <code>git</code>, <code>github</code>, <code>sqlite</code>, <code>postgres</code>, <code>puppeteer</code>, <code>brave-search</code> та інші. Якщо щось вам потрібне — спочатку перевірте чи воно вже є тут.</p>
+    <pre><code># Приклад — підключити memory сервер:
+npm install -g @modelcontextprotocol/server-memory
+claude mcp add memory npx @modelcontextprotocol/server-memory</code></pre>
+  </div>
+
+  <h2 class="section-title" id="clis">⌨️ CLI-інструменти у тандемі з Claude</h2>
+  <p style="color: var(--text-dim); margin-bottom: 24px;">Claude може запускати будь-який CLI через Bash. Ось ті, що варто мати глобально — Claude буде використовувати їх автоматично.</p>
+
+  <div class="mini-card">
+    <h4><a href="https://cli.github.com/" target="_blank">🐙 gh — GitHub CLI</a> <span class="stars-mini">офіційний</span></h4>
+    <p>Робота з GitHub з командного рядка: PR, issues, releases, workflows, репозиторії. Claude використовує його для перегляду PR, створення issues, перевірки CI-статусу. Без цього багато github-сценаріїв не запрацюють.</p>
+    <pre><code>brew install gh
+gh auth login</code></pre>
+  </div>
+
+  <div class="mini-card">
+    <h4><a href="https://github.com/googleworkspace/cli" target="_blank">📊 gws — Google Workspace CLI</a> <span class="stars-mini">⭐ 26 000</span></h4>
+    <p>Робота з Drive, Sheets, Docs, Gmail, Calendar з терміналу. Claude може створювати документи, читати таблиці, надсилати листи від вашого імені.</p>
+    <pre><code>npm install -g @googleworkspace/cli
+gws auth login</code></pre>
+  </div>
+
+  <div class="mini-card">
+    <h4><a href="https://github.com/vercel/vercel" target="_blank">▲ vercel — Vercel CLI</a> <span class="stars-mini">⭐ 15 000</span></h4>
+    <p>Деплой проєктів на Vercel. Claude уміє за командою «задеплой» зібрати білд, налаштувати env-змінні, прив'язати домени.</p>
+    <pre><code>npm install -g vercel
+vercel login</code></pre>
+  </div>
+
+  <div class="mini-card">
+    <h4><a href="https://github.com/firecrawl/firecrawl-cli" target="_blank">🔥 firecrawl — Firecrawl CLI</a> <span class="stars-mini">пара до плагіна</span></h4>
+    <p>Командний інтерфейс до Firecrawl для скриптів і CI. Працює без MCP — корисно коли треба запустити скрейпінг у скрипті чи cron.</p>
+    <pre><code>npm install -g firecrawl-cli</code></pre>
+  </div>
+
+  <div class="mini-card">
+    <h4><a href="https://playwright.dev/" target="_blank">🎭 playwright-cli</a> <span class="stars-mini">пара до плагіна</span></h4>
+    <p>CLI до Playwright — швидкий запуск автотестів і скрейпінг скриптами без MCP. Для CI/CD або разових перевірок.</p>
+    <pre><code>npm install -g @playwright/cli</code></pre>
+  </div>
+
+  <h2 class="section-title" id="marketplaces">🌐 Маркетплейси для пошуку інших скілів</h2>
+  <p style="color: var(--text-dim); margin-bottom: 24px;">Цей посібник охоплює 16 топових інструментів. Якщо потрібно щось специфічне — ось де шукати далі.</p>
+
+  <div class="resource-grid">
+    <div class="resource-card">
+      <div class="resource-card-title"><a href="https://github.com/hesreallyhim/awesome-claude-code" target="_blank">awesome-claude-code</a></div>
+      <div class="resource-card-stars">⭐ 43 000</div>
+      <div class="resource-card-desc">Головний awesome-list для Claude Code. Куратовані плагіни, скіли, інтеграції, освітні ресурси. Першочерговий пункт пошуку.</div>
+    </div>
+
+    <div class="resource-card">
+      <div class="resource-card-title"><a href="https://github.com/punkpeye/awesome-mcp-servers" target="_blank">awesome-mcp-servers</a></div>
+      <div class="resource-card-stars">⭐ 86 000</div>
+      <div class="resource-card-desc">Найбільший каталог MCP-серверів — сотні готових інтеграцій. Потрібен Notion, Slack, Jira чи свою СУБД? Шукайте тут.</div>
+    </div>
+
+    <div class="resource-card">
+      <div class="resource-card-title"><a href="https://github.com/modelcontextprotocol/servers" target="_blank">modelcontextprotocol/servers</a></div>
+      <div class="resource-card-stars">⭐ 85 000</div>
+      <div class="resource-card-desc">Офіційний реєстр MCP-серверів від команди протоколу. Найвища надійність і якість документації.</div>
+    </div>
+
+    <div class="resource-card">
+      <div class="resource-card-title"><a href="https://github.com/VoltAgent/awesome-claude-code-subagents" target="_blank">awesome-claude-code-subagents</a></div>
+      <div class="resource-card-stars">⭐ 19 000</div>
+      <div class="resource-card-desc">Список subagent-ів для Claude Code — спеціалізовані помічники під різні задачі. Корисно для multi-agent workflow.</div>
+    </div>
+
+    <div class="resource-card">
+      <div class="resource-card-title"><a href="https://github.com/anthropics/claude-plugins-official" target="_blank">claude-plugins-official</a></div>
+      <div class="resource-card-stars">⭐ 19 000</div>
+      <div class="resource-card-desc">Офіційний маркетплейс Anthropic. Найвища якість, але вибір вузький — лише розробницькі плагіни.</div>
+    </div>
+
+    <div class="resource-card">
+      <div class="resource-card-title"><a href="https://github.com/rohitg00/awesome-claude-code-toolkit" target="_blank">awesome-claude-code-toolkit</a></div>
+      <div class="resource-card-stars">⭐ 1 500</div>
+      <div class="resource-card-desc">Тулкіт зі скриптами, hooks, конфігами для Claude Code. Корисно для глибокого тюнінгу і нестандартних сценаріїв.</div>
+    </div>
+
+    <div class="resource-card">
+      <div class="resource-card-title"><a href="https://github.com/daymade/claude-code-skills" target="_blank">daymade/claude-code-skills</a></div>
+      <div class="resource-card-stars">⭐ 980</div>
+      <div class="resource-card-desc">Найбільший community-маркетплейс зі ~50 production-готовими скілами. Excel, GitHub, debugging, deep research.</div>
+    </div>
+
+    <div class="resource-card">
+      <div class="resource-card-title"><a href="https://github.com/ccplugins/awesome-claude-code-plugins" target="_blank">ccplugins/awesome-claude-code-plugins</a></div>
+      <div class="resource-card-stars">⭐ 762</div>
+      <div class="resource-card-desc">Окремий awesome-list лише для плагінів. Менше, але більш сфокусований на packaged-плагінах.</div>
+    </div>
+  </div>
+
   <section class="recommendation" id="recommendation">
     <h2>⚡ Рекомендований стек для початківця</h2>
     <p style="color: var(--text-dim); margin-bottom: 24px;">Не намагайтесь поставити все одразу. Ось перевірений порядок:</p>
     <ol>
       <li><strong>Базовий мінімум:</strong> Claude Code + Superpowers + Anthropic Skills. Цього вистачить на 80% задач.</li>
+      <li><strong>CLI-інструменти:</strong> <code>gh</code>, <code>gws</code>, <code>vercel</code> — встановити глобально, авторизуватись.</li>
       <li><strong>Для коду:</strong> code-review, frontend-design, claude-code-setup, skill-creator з офіційного маркетплейсу.</li>
-      <li><strong>Для веб-доступу:</strong> Firecrawl + Context7. Claude отримає доступ до інтернету і свіжої документації.</li>
-      <li><strong>Для браузерної автоматизації:</strong> Playwright + Chrome DevTools MCP. Тестування, дебаг, скрейпінг авторизованих сторінок.</li>
+      <li><strong>Для веб-доступу:</strong> Firecrawl + Context7. Інтернет і свіжа документація.</li>
+      <li><strong>Для браузерної автоматизації:</strong> Playwright (тести, скрейпери) + Browser Harness (логіни, адмінки).</li>
       <li><strong>Для пам'яті:</strong> Claude Memory. Щоб не пояснювати одне й те саме щоразу.</li>
       <li><strong>Якщо робите інтерфейси:</strong> UI/UX Pro Max + Lazyweb + плагін design.</li>
       <li><strong>Економія токенів:</strong> Caveman (увімкнути <code>full</code>).</li>
-      <li><strong>Мобільний контроль:</strong> Telegram Supercharged. Керуйте з телефону.</li>
+      <li><strong>Мобільний контроль:</strong> Telegram Supercharged.</li>
     </ol>
     <p style="margin-top: 24px; color: var(--text-dim);">💡 Після встановлення запустіть <code>/claude-automation-recommender</code> зі скіла claude-code-setup — він проаналізує ваш конкретний проєкт і запропонує що ще додати.</p>
   </section>
