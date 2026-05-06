@@ -4,411 +4,476 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Тюнінг Claude Code — посібник для початківця</title>
-<meta name="description" content="Простий гід світом плагінів, скілів, MCP-серверів і CLI Claude Code. Відсортовано за популярністю на GitHub.">
+<meta name="description" content="Простий гід світом плагінів, скілів, MCP-серверів і CLI Claude Code. 15 інструментів за категоріями.">
 <style>
   :root {
-    --bg: #0f0f14;
-    --bg-card: #1a1a24;
-    --bg-card-hover: #22222e;
-    --border: #2a2a38;
-    --text: #e6e6ed;
-    --text-dim: #9999a8;
-    --text-muted: #6b6b7a;
-    --accent: #ff7a59;
-    --accent-soft: rgba(255, 122, 89, 0.12);
-    --gold: #ffc857;
-    --green: #4ade80;
-    --blue: #60a5fa;
-    --purple: #c084fc;
-    --pink: #f472b6;
+    --bg: #08080d;
+    --bg-elev: #12121a;
+    --bg-card: #16161f;
+    --bg-card-hover: #1d1d29;
+    --border: #24242f;
+    --border-bright: #353545;
+    --text: #f5f5f7;
+    --text-dim: #9ea0ad;
+    --text-muted: #6b6d7a;
+
+    --cat-foundation: #ff7a59;
+    --cat-foundation-soft: rgba(255, 122, 89, 0.14);
+    --cat-web: #38bdf8;
+    --cat-web-soft: rgba(56, 189, 248, 0.14);
+    --cat-memory: #c084fc;
+    --cat-memory-soft: rgba(192, 132, 252, 0.14);
+    --cat-design: #f472b6;
+    --cat-design-soft: rgba(244, 114, 182, 0.14);
+    --cat-plugins: #84cc16;
+    --cat-plugins-soft: rgba(132, 204, 22, 0.14);
+    --cat-life: #fbbf24;
+    --cat-life-soft: rgba(251, 191, 36, 0.14);
+
+    --gold: #fbbf24;
+
+    --accent: var(--cat-foundation);
+    --accent-soft: var(--cat-foundation-soft);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
-
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', system-ui, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
-    line-height: 1.6;
+    line-height: 1.65;
     min-height: 100vh;
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 122, 89, 0.15), transparent),
-      radial-gradient(ellipse 60% 40% at 80% 110%, rgba(192, 132, 252, 0.1), transparent);
+      radial-gradient(ellipse 90% 60% at 50% -10%, rgba(255, 122, 89, 0.18), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 90% 5%, rgba(192, 132, 252, 0.12), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 10% 95%, rgba(56, 189, 248, 0.10), transparent 60%),
+      radial-gradient(ellipse 50% 30% at 80% 80%, rgba(244, 114, 182, 0.08), transparent 60%);
     background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.01em;
   }
 
   .container {
-    max-width: 1100px;
+    max-width: 1240px;
     margin: 0 auto;
     padding: 60px 24px 100px;
   }
 
   .hero {
-    text-align: center;
-    padding: 60px 20px 80px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 60px;
+    text-align: left;
+    padding: 80px 0 100px;
+    position: relative;
   }
-
-  .hero-badge {
-    display: inline-block;
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     background: var(--accent-soft);
     color: var(--accent);
-    padding: 6px 16px;
+    padding: 8px 16px;
     border-radius: 100px;
     font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     text-transform: uppercase;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
+    border: 1px solid rgba(255, 122, 89, 0.25);
   }
-
   .hero h1 {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 800;
-    line-height: 1.15;
-    margin-bottom: 20px;
-    background: linear-gradient(135deg, #fff 0%, #ff7a59 100%);
+    font-size: clamp(3rem, 9vw, 7rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 28px;
+  }
+  .hero h1 .line-1 { display: block; color: var(--text); }
+  .hero h1 .line-2 {
+    display: block;
+    background: linear-gradient(120deg, #ff7a59 0%, #f472b6 35%, #c084fc 70%, #38bdf8 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-
-  .hero p {
-    font-size: 1.15rem;
+  .hero-sub {
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
     color: var(--text-dim);
     max-width: 720px;
-    margin: 0 auto 32px;
+    margin-bottom: 48px;
+    font-weight: 400;
   }
-
-  .hero-stats {
+  .hero-stats { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-stat {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 12px 22px;
     display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-    margin-top: 32px;
+    align-items: center;
+    gap: 10px;
+    transition: border-color 0.2s, transform 0.2s;
   }
-
-  .hero-stat { text-align: center; }
+  .hero-stat:hover { border-color: var(--accent); transform: translateY(-1px); }
   .hero-stat-num {
-    font-size: 2rem;
-    font-weight: 700;
+    font-size: 1.4rem;
+    font-weight: 800;
     color: var(--accent);
+    letter-spacing: -0.02em;
   }
-  .hero-stat-label {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
+  .hero-stat-label { font-size: 0.85rem; color: var(--text-dim); font-weight: 500; }
 
   .intro {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-    margin-bottom: 60px;
+    border-radius: 24px;
+    padding: 40px;
+    margin-bottom: 80px;
+    backdrop-filter: blur(8px);
   }
-  .intro h2 { font-size: 1.5rem; margin-bottom: 16px; }
-  .intro p { color: var(--text-dim); margin-bottom: 12px; }
+  .intro h2 { font-size: 1.6rem; margin-bottom: 16px; font-weight: 700; letter-spacing: -0.02em; }
+  .intro p { color: var(--text-dim); margin-bottom: 12px; font-size: 1.02rem; }
 
   .definition-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-    margin-top: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 28px;
   }
   .def {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 16px;
+    padding: 22px;
+    transition: border-color 0.2s, transform 0.2s, background 0.2s;
   }
-  .def-icon { font-size: 1.6rem; margin-bottom: 8px; }
-  .def-name {
-    font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 6px;
+  .def:hover { border-color: var(--border-bright); background: rgba(255, 255, 255, 0.035); transform: translateY(-2px); }
+  .def-icon { font-size: 1.8rem; margin-bottom: 10px; }
+  .def-name { font-weight: 700; color: var(--text); margin-bottom: 6px; font-size: 1rem; }
+  .def-desc { font-size: 0.92rem; color: var(--text-dim); line-height: 1.5; }
+
+  .cat-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(8, 8, 13, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
   }
-  .def-desc {
-    font-size: 0.9rem;
+  .cat-nav-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .cat-nav-inner::-webkit-scrollbar { display: none; }
+  .cat-nav a {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 100px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
     color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cat-nav a:hover {
+    border-color: var(--border-bright);
+    color: var(--text);
+    transform: translateY(-1px);
   }
 
-  h2.section-title {
+  .category { margin-bottom: 80px; }
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .category-icon {
     font-size: 2rem;
-    margin: 60px 0 24px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--border);
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+  }
+  .category-title-block { flex: 1; }
+  .category-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .category-subtitle { color: var(--text-dim); font-size: 0.95rem; }
+  .category-count {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .plugin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+  }
+  .plugin-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .plugin-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 700px) {
+    .plugin-grid,
+    .plugin-grid.cols-2,
+    .plugin-grid.cols-3 { grid-template-columns: 1fr; }
   }
 
   .plugin {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 32px;
-    margin-bottom: 24px;
-    transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    padding: 28px;
+    transition: transform 0.25s ease, border-color 0.25s, background 0.25s, box-shadow 0.25s;
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
   .plugin:hover {
     background: var(--bg-card-hover);
     border-color: var(--accent);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px -12px var(--accent-soft);
+  }
+  .plugin.featured {
+    grid-column: span 2;
+    padding: 36px;
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card-hover) 100%);
+  }
+  .plugin.featured::after {
+    content: 'TOP 1';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--accent);
+    color: #000;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+  }
+  @media (max-width: 700px) {
+    .plugin.featured { grid-column: span 1; padding: 28px; }
   }
 
   .plugin-rank {
     position: absolute;
-    top: 24px;
-    right: 24px;
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, var(--accent), #ff5733);
-    border-radius: 12px;
+    bottom: -20px;
+    right: -10px;
+    font-size: 9rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--accent);
+    opacity: 0.05;
+    letter-spacing: -0.05em;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .plugin:hover .plugin-rank { opacity: 0.12; }
+
+  .plugin-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+  .plugin-icon {
+    font-size: 1.8rem;
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 800;
-    font-size: 1.1rem;
-    color: white;
-    box-shadow: 0 4px 16px rgba(255, 122, 89, 0.3);
-  }
-
-  .plugin-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 20px;
-    padding-right: 60px;
-  }
-
-  .plugin-icon {
-    font-size: 2.5rem;
-    line-height: 1;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
     flex-shrink: 0;
   }
-
-  .plugin-title-block { flex: 1; }
-
-  .plugin-name {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: var(--text);
-  }
-  .plugin-name a {
-    color: inherit;
-    text-decoration: none;
-    border-bottom: 1px dashed transparent;
-    transition: border-color 0.2s;
-  }
-  .plugin-name a:hover { border-bottom-color: var(--accent); }
+  .plugin.featured .plugin-icon { font-size: 2.2rem; width: 60px; height: 60px; }
+  .plugin-title-block { flex: 1; min-width: 0; }
+  .plugin-name { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.02em; }
+  .plugin.featured .plugin-name { font-size: 1.6rem; }
+  .plugin-name a { color: inherit; text-decoration: none; transition: color 0.15s; }
+  .plugin-name a:hover { color: var(--accent); }
 
   .plugin-stars {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    background: rgba(255, 200, 87, 0.15);
+    gap: 4px;
     color: var(--gold);
-    padding: 4px 12px;
-    border-radius: 100px;
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.78rem;
+    font-weight: 700;
   }
-
-  .plugin-tagline {
-    color: var(--text-dim);
-    font-size: 1rem;
-    margin-bottom: 16px;
-  }
-
-  .plugin-meta {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
-
+  .plugin-tagline { color: var(--text-dim); font-size: 0.92rem; margin-bottom: 14px; line-height: 1.45; }
+  .plugin.featured .plugin-tagline { font-size: 1.05rem; }
+  .plugin-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
   .meta-pill {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid var(--border);
     color: var(--text-dim);
-    padding: 6px 12px;
+    padding: 4px 10px;
     border-radius: 100px;
-    font-size: 0.8rem;
+    font-size: 0.72rem;
+    font-weight: 500;
   }
-  .meta-pill.auto { background: rgba(74, 222, 128, 0.1); color: var(--green); border-color: transparent; }
-  .meta-pill.cmd { background: rgba(96, 165, 250, 0.1); color: var(--blue); border-color: transparent; }
-  .meta-pill.bg { background: rgba(192, 132, 252, 0.1); color: var(--purple); border-color: transparent; }
-
-  .plugin-desc {
-    color: var(--text-dim);
-    margin-bottom: 16px;
-  }
-  .plugin-desc + .plugin-desc { margin-top: -4px; }
+  .meta-pill.repo { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; }
+  .plugin-desc { color: var(--text-dim); margin-bottom: 14px; font-size: 0.92rem; line-height: 1.6; }
 
   pre {
-    background: #0a0a10;
+    background: #050508;
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 16px;
+    padding: 14px;
     overflow-x: auto;
-    font-family: 'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
-    font-size: 0.88rem;
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 0.82rem;
     color: #d4d4dc;
-    margin: 12px 0;
+    margin: 10px 0;
+    line-height: 1.5;
   }
   code {
-    font-family: 'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
     background: rgba(255, 255, 255, 0.06);
     padding: 2px 6px;
     border-radius: 4px;
-    font-size: 0.88em;
+    font-size: 0.86em;
     color: var(--accent);
   }
-  pre code {
-    background: transparent;
-    padding: 0;
-    color: inherit;
-    font-size: inherit;
-  }
+  pre code { background: transparent; padding: 0; color: inherit; font-size: inherit; }
 
   .install-block {
-    background: linear-gradient(135deg, rgba(96, 165, 250, 0.06), rgba(192, 132, 252, 0.06));
-    border: 1px solid rgba(96, 165, 250, 0.2);
+    background: linear-gradient(135deg, var(--accent-soft) 0%, transparent 100%);
+    border: 1px solid var(--accent);
     border-radius: 12px;
-    padding: 16px;
-    margin: 16px 0;
+    padding: 14px;
+    margin: 14px 0;
   }
   .install-block-label {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--blue);
-    margin-bottom: 8px;
-    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-weight: 700;
   }
-  .install-block pre { margin: 0; background: rgba(0,0,0,0.3); border-color: transparent; }
+  .install-block pre { margin: 0; background: rgba(0,0,0,0.5); border-color: transparent; }
 
-  .commands-list { list-style: none; margin-top: 8px; }
+  details.cmd-toggle {
+    margin-top: 10px;
+    border-top: 1px dashed var(--border);
+    padding-top: 12px;
+  }
+  details.cmd-toggle summary {
+    cursor: pointer;
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    list-style: none;
+    user-select: none;
+  }
+  details.cmd-toggle summary::after { content: ' ▾'; color: var(--text-muted); }
+  details.cmd-toggle[open] summary::after { content: ' ▴'; }
+
+  .commands-list { list-style: none; margin-top: 10px; }
   .commands-list li {
-    padding: 8px 0;
+    padding: 6px 0;
     border-top: 1px dashed var(--border);
     display: flex;
-    gap: 12px;
+    gap: 10px;
     align-items: flex-start;
     flex-wrap: wrap;
   }
   .commands-list li:first-child { border-top: none; }
-  .commands-list code {
-    background: var(--accent-soft);
-    color: var(--accent);
-    flex-shrink: 0;
-  }
-  .cmd-desc {
-    color: var(--text-dim);
-    font-size: 0.92rem;
-    flex: 1;
-    min-width: 200px;
-  }
+  .commands-list code { background: var(--accent-soft); color: var(--accent); flex-shrink: 0; font-size: 0.78rem; }
+  .cmd-desc { color: var(--text-dim); font-size: 0.85rem; flex: 1; min-width: 180px; }
 
   .sub-skill {
     background: rgba(255, 255, 255, 0.02);
-    border-left: 3px solid var(--purple);
-    padding: 14px 18px;
-    margin: 12px 0;
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin: 10px 0;
     border-radius: 0 10px 10px 0;
   }
-  .sub-skill-name {
-    font-weight: 600;
-    color: var(--purple);
-    margin-bottom: 4px;
-    font-size: 0.95rem;
-  }
-  .sub-skill-desc {
-    color: var(--text-dim);
-    font-size: 0.9rem;
+  .sub-skill-name { font-weight: 700; color: var(--accent); margin-bottom: 4px; font-size: 0.9rem; }
+  .sub-skill-desc { color: var(--text-dim); font-size: 0.85rem; line-height: 1.5; }
+
+  #cat-foundation { --accent: var(--cat-foundation); --accent-soft: var(--cat-foundation-soft); }
+  #cat-web        { --accent: var(--cat-web);        --accent-soft: var(--cat-web-soft); }
+  #cat-memory     { --accent: var(--cat-memory);     --accent-soft: var(--cat-memory-soft); }
+  #cat-design     { --accent: var(--cat-design);     --accent-soft: var(--cat-design-soft); }
+  #cat-plugins    { --accent: var(--cat-plugins);    --accent-soft: var(--cat-plugins-soft); }
+  #cat-life       { --accent: var(--cat-life);       --accent-soft: var(--cat-life-soft); }
+
+  h2.section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    margin: 80px 0 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.03em;
   }
 
-  .compare-block {
-    background: linear-gradient(135deg, rgba(255, 122, 89, 0.06), rgba(96, 165, 250, 0.04));
-    border: 1px solid rgba(255, 122, 89, 0.2);
-    border-radius: 14px;
-    padding: 20px 24px;
-    margin: 16px 0;
+  .mini-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
   }
-  .compare-block strong { color: var(--accent); }
-  .compare-block ul { padding-left: 22px; color: var(--text-dim); margin-top: 6px; }
-  .compare-block ul li { margin-bottom: 4px; }
-
-  .recommendation {
-    background: linear-gradient(135deg, rgba(255, 122, 89, 0.1), rgba(192, 132, 252, 0.05));
-    border: 1px solid rgba(255, 122, 89, 0.3);
-    border-radius: 20px;
-    padding: 40px;
-    margin: 60px 0;
-  }
-  .recommendation h2 {
-    color: var(--accent);
-    margin-bottom: 20px;
-  }
-  .recommendation ol {
-    padding-left: 24px;
-    color: var(--text-dim);
-  }
-  .recommendation ol li {
-    margin-bottom: 12px;
-    padding-left: 8px;
-  }
-  .recommendation ol li strong { color: var(--text); }
-
-  .toc {
+  .mini-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 24px 28px;
-    margin-bottom: 40px;
+    padding: 22px;
+    transition: border-color 0.2s, transform 0.2s;
   }
-  .toc h3 {
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-muted);
-    margin-bottom: 16px;
-  }
-  .toc-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 8px 24px;
-  }
-  .toc a {
-    color: var(--text-dim);
-    text-decoration: none;
-    padding: 6px 0;
+  .mini-card:hover { border-color: var(--border-bright); transform: translateY(-2px); }
+  .mini-card h4 {
+    font-size: 1.05rem;
+    margin-bottom: 6px;
     display: flex;
+    align-items: center;
     gap: 10px;
-    transition: color 0.15s;
+    flex-wrap: wrap;
+    font-weight: 700;
+    letter-spacing: -0.01em;
   }
-  .toc a:hover { color: var(--accent); }
-  .toc-num {
-    color: var(--text-muted);
-    font-weight: 600;
-    width: 24px;
-    flex-shrink: 0;
-  }
-  .toc-stars {
-    margin-left: auto;
+  .mini-card h4 a { color: var(--text); text-decoration: none; }
+  .mini-card h4 a:hover { color: #38bdf8; }
+  .mini-card h4 .stars-mini {
+    background: rgba(251, 191, 36, 0.14);
     color: var(--gold);
-    font-size: 0.8rem;
+    padding: 2px 9px;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 700;
   }
+  .mini-card p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 10px; line-height: 1.6; }
+  .mini-card pre { font-size: 0.78rem; padding: 11px; }
 
   .resource-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
     margin-top: 20px;
   }
   .resource-card {
@@ -416,61 +481,36 @@
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 20px;
-    transition: border-color 0.2s, transform 0.2s;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
   }
   .resource-card:hover {
-    border-color: var(--accent);
+    border-color: #38bdf8;
     transform: translateY(-2px);
+    box-shadow: 0 8px 24px -8px rgba(56, 189, 248, 0.2);
   }
-  .resource-card-title {
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .resource-card-title a {
-    color: var(--text);
-    text-decoration: none;
-  }
-  .resource-card-title a:hover { color: var(--accent); }
-  .resource-card-stars {
-    color: var(--gold);
-    font-size: 0.8rem;
-    margin-bottom: 8px;
-    font-weight: 600;
-  }
-  .resource-card-desc {
-    color: var(--text-dim);
-    font-size: 0.9rem;
-  }
+  .resource-card-title { font-weight: 700; margin-bottom: 4px; font-size: 1rem; }
+  .resource-card-title a { color: var(--text); text-decoration: none; }
+  .resource-card-title a:hover { color: #38bdf8; }
+  .resource-card-stars { color: var(--gold); font-size: 0.78rem; margin-bottom: 8px; font-weight: 700; }
+  .resource-card-desc { color: var(--text-dim); font-size: 0.88rem; line-height: 1.55; }
 
-  .mini-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px 24px;
-    margin-bottom: 16px;
-    transition: border-color 0.2s;
+  .recommendation {
+    background: linear-gradient(135deg, rgba(255, 122, 89, 0.12), rgba(192, 132, 252, 0.06) 50%, rgba(56, 189, 248, 0.08));
+    border: 1px solid rgba(255, 122, 89, 0.3);
+    border-radius: 24px;
+    padding: 48px;
+    margin: 60px 0;
   }
-  .mini-card:hover { border-color: var(--accent); }
-  .mini-card h4 {
-    font-size: 1.1rem;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+  .recommendation h2 {
+    color: var(--cat-foundation);
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
   }
-  .mini-card h4 a { color: var(--text); text-decoration: none; }
-  .mini-card h4 a:hover { color: var(--accent); }
-  .mini-card h4 .stars-mini {
-    background: rgba(255, 200, 87, 0.15);
-    color: var(--gold);
-    padding: 2px 10px;
-    border-radius: 100px;
-    font-size: 0.75rem;
-    font-weight: 600;
-  }
-  .mini-card p { color: var(--text-dim); font-size: 0.92rem; margin-bottom: 8px; }
-  .mini-card pre { font-size: 0.82rem; padding: 12px; }
+  .recommendation ol { padding-left: 24px; color: var(--text-dim); font-size: 1rem; }
+  .recommendation ol li { margin-bottom: 14px; padding-left: 8px; }
+  .recommendation ol li strong { color: var(--text); font-weight: 700; }
 
   footer {
     text-align: center;
@@ -478,684 +518,656 @@
     border-top: 1px solid var(--border);
     margin-top: 80px;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
   }
 
   @media (max-width: 600px) {
     .container { padding: 40px 16px 60px; }
-    .plugin { padding: 24px 20px; }
-    .plugin-header { padding-right: 50px; }
-    .plugin-rank { width: 36px; height: 36px; top: 20px; right: 20px; font-size: 0.95rem; }
-    .recommendation { padding: 28px 20px; }
+    .hero { padding: 40px 0 60px; }
+    .plugin { padding: 22px 18px; }
+    .recommendation { padding: 32px 22px; }
+    .intro { padding: 28px 22px; }
+    .category-icon { width: 48px; height: 48px; font-size: 1.6rem; }
   }
 </style>
 </head>
 <body>
+
+<nav class="cat-nav">
+  <div class="cat-nav-inner">
+    <a href="#cat-foundation">🚀 Основа</a>
+    <a href="#cat-web">🌐 Веб + браузер</a>
+    <a href="#cat-memory">🧠 Память</a>
+    <a href="#cat-design">🎨 Дизайн</a>
+    <a href="#cat-plugins">🛠️ Плагіни</a>
+    <a href="#cat-life">📱 Якість життя</a>
+    <a href="#mcps">🛰️ MCP</a>
+    <a href="#clis">⌨️ CLI</a>
+    <a href="#marketplaces">🌐 Маркетплейси</a>
+    <a href="#recommendation">⚡ Стек</a>
+  </div>
+</nav>
+
 <div class="container">
 
   <section class="hero">
-    <span class="hero-badge">📘 Посібник для початківця</span>
-    <h1>Тюнінг Claude Code</h1>
-    <p>Простий гід світом плагінів, скілів, MCP-серверів і CLI — без жаргону, без занурення в код. Лише те, що допоможе вам зрозуміти, що це таке і навіщо воно потрібне.</p>
+    <span class="hero-tag">📘 Посібник для початківця</span>
+    <h1>
+      <span class="line-1">Тюнінг</span>
+      <span class="line-2">Claude&nbsp;Code.</span>
+    </h1>
+    <p class="hero-sub">15 топових плагінів і скілів — без жаргону, без занурення в код. Для тих, хто хоче дати своєму AI-помічнику справжні суперсили.</p>
     <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-num">15</div>
-        <div class="hero-stat-label">Плагінів</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">1M+</div>
-        <div class="hero-stat-label">Зірок ⭐</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">100%</div>
-        <div class="hero-stat-label">Безкоштовно</div>
-      </div>
+      <div class="hero-stat"><span class="hero-stat-num">15</span><span class="hero-stat-label">Плагінів</span></div>
+      <div class="hero-stat"><span class="hero-stat-num">1M+</span><span class="hero-stat-label">⭐ на GitHub</span></div>
+      <div class="hero-stat"><span class="hero-stat-num">100%</span><span class="hero-stat-label">Безкоштовно</span></div>
+      <div class="hero-stat"><span class="hero-stat-num">6</span><span class="hero-stat-label">Категорій</span></div>
     </div>
   </section>
 
   <section class="intro">
     <h2>🤔 Що це взагалі таке?</h2>
-    <p>Уявіть, що Claude Code — це ваш цифровий помічник-програміст. «Голий» помічник вміє багато, але кожен проєкт особливий: одному потрібна допомога з дизайном, іншому — з документами, третьому — з аналізом даних.</p>
-    <p>Щоб не носити з собою «всі знання світу», помічник вчиться «навичкам» (скілам) і встановлює «розширення» (плагіни). Це як додатки на телефоні: завантажили — отримали нову суперсилу.</p>
+    <p>Уявіть, що Claude Code — ваш цифровий помічник-програміст. «Голий» помічник вміє багато, але кожен проєкт особливий. Щоб не носити з собою «всі знання світу», помічник вчиться навичкам (скілам) і встановлює розширення (плагіни). Як додатки на телефоні: завантажили — отримали нову суперсилу.</p>
 
     <div class="definition-grid">
       <div class="def">
         <div class="def-icon">🎯</div>
         <div class="def-name">Скіл (Skill)</div>
-        <div class="def-desc">Спеціальна навичка — автоматично «вмикається», коли Claude бачить релевантну задачу.</div>
+        <div class="def-desc">Навичка — автоматично вмикається, коли Claude бачить релевантну задачу.</div>
       </div>
       <div class="def">
         <div class="def-icon">🔌</div>
         <div class="def-name">Плагін (Plugin)</div>
-        <div class="def-desc">Пакет з кількох скілів і команд. Зазвичай має тематику (дизайн, документи, веб-доступ).</div>
+        <div class="def-desc">Пакет з кількох скілів і команд. Зазвичай має тематику.</div>
       </div>
       <div class="def">
         <div class="def-icon">🛰️</div>
         <div class="def-name">MCP-сервер</div>
-        <div class="def-desc">Окрема програма, що дає Claude нові «руки» — підключення до зовнішнього сервісу (Notion, Telegram, Google).</div>
+        <div class="def-desc">Окрема програма, що дає Claude нові «руки» — підключення до зовнішніх сервісів.</div>
       </div>
       <div class="def">
         <div class="def-icon">⚡</div>
         <div class="def-name">CLI</div>
-        <div class="def-desc">Утиліта в терміналі (наприклад, <code>gh</code>), якою Claude користується через Bash. Часто пара до плагіна.</div>
+        <div class="def-desc">Утиліта в терміналі (наприклад, <code>gh</code>), якою Claude користується через Bash.</div>
       </div>
     </div>
   </section>
 
-  <section class="toc">
-    <h3>📋 Зміст</h3>
-    <div class="toc-grid">
-      <a href="#p1"><span class="toc-num">1.</span> Superpowers <span class="toc-stars">⭐ 180k</span></a>
-      <a href="#p2"><span class="toc-num">2.</span> Anthropic Skills <span class="toc-stars">⭐ 128k</span></a>
-      <a href="#p4"><span class="toc-num">3.</span> Firecrawl <span class="toc-stars">⭐ 116k</span></a>
-      <a href="#p5"><span class="toc-num">4.</span> Playwright <span class="toc-stars">⭐ 88k</span></a>
-      <a href="#p6"><span class="toc-num">5.</span> UI/UX Pro Max <span class="toc-stars">⭐ 74k</span></a>
-      <a href="#p7"><span class="toc-num">6.</span> Claude Memory <span class="toc-stars">⭐ 73k</span></a>
-      <a href="#p8"><span class="toc-num">7.</span> Context7 <span class="toc-stars">⭐ 55k</span></a>
-      <a href="#p9"><span class="toc-num">8.</span> Anthropic Plugins <span class="toc-stars">⭐ 19k</span></a>
-      <a href="#p10"><span class="toc-num">9.</span> Knowledge Work <span class="toc-stars">⭐ 12k</span></a>
-      <a href="#p11"><span class="toc-num">10.</span> Browser Harness <span class="toc-stars">⭐ 11k</span></a>
-      <a href="#p12"><span class="toc-num">11.</span> Community Skills <span class="toc-stars">⭐ 1k</span></a>
-      <a href="#p13"><span class="toc-num">12.</span> Skill Creator <span class="toc-stars">⭐ 855</span></a>
-      <a href="#p14"><span class="toc-num">13.</span> Lazyweb <span class="toc-stars">⭐ 203</span></a>
-      <a href="#p15"><span class="toc-num">14.</span> Telegram Supercharged <span class="toc-stars">⭐ 98</span></a>
-      <a href="#p16"><span class="toc-num">15.</span> Caveman <span class="toc-stars">⭐ 62</span></a>
-      <a href="#mcps"><span class="toc-num">🛰️</span> MCP-сервери</a>
-      <a href="#clis"><span class="toc-num">⌨️</span> CLI-інструменти</a>
-      <a href="#marketplaces"><span class="toc-num">🌐</span> Маркетплейси для пошуку</a>
-      <a href="#recommendation"><span class="toc-num">⚡</span> Рекомендований стек</a>
-    </div>
-  </section>
-  <h2 class="section-title">🚀 Топ плагінів і скілів</h2>
-
-  <article class="plugin" id="p1">
-    <div class="plugin-rank">1</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">🦸</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/obra/superpowers" target="_blank">Superpowers</a></div>
-        <div class="plugin-stars">⭐ 180 000 зірок</div>
+  <section class="category" id="cat-foundation">
+    <div class="category-header">
+      <div class="category-icon">🚀</div>
+      <div class="category-title-block">
+        <div class="category-title">Основа</div>
+        <div class="category-subtitle">Без цих двох плагінів усе інше не має сенсу</div>
       </div>
+      <span class="category-count">2 плагіни</span>
     </div>
-    <div class="plugin-tagline">Дисципліна для Claude — змушує думати як інженер</div>
-    <div class="plugin-meta">
-      <span class="meta-pill auto">🟢 Працює автоматично</span>
-      <span class="meta-pill">obra/superpowers</span>
-    </div>
-    <p class="plugin-desc">Найпопулярніший фреймворк скілів від відомого розробника Jesse Vincent. Перевизначає те, як Claude підходить до завдань: спочатку обдумати, потім написати план, перевірити перед тим як казати «готово».</p>
-    <p class="plugin-desc">Скіл містить десятки міні-скілів — як дисциплінарний кодекс. Брейнштормінг перед фічею, обов'язкове тестування, систематичний дебаг, верифікація командами замість порожніх обіцянок. Якщо хочете щоб Claude робив роботу серйозно — ставте першим.</p>
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
+
+    <div class="plugin-grid cols-2">
+      <article class="plugin featured">
+        <div class="plugin-rank">1</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">🦸</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/obra/superpowers" target="_blank">Superpowers</a></div>
+            <div class="plugin-stars">⭐ 180 000</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Дисципліна для Claude — змушує думати як інженер</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🟢 Авто</span>
+          <span class="meta-pill repo">obra/superpowers</span>
+        </div>
+        <p class="plugin-desc">Найпопулярніший фреймворк скілів від Jesse Vincent. Перевизначає те, як Claude підходить до задач: спочатку обдумати, потім план, перевірити перед «готово». Десятки міні-скілів — брейнштормінг, тестування, систематичний дебаг, верифікація замість порожніх обіцянок. Якщо хочете щоб Claude робив роботу серйозно — ставте першим.</p>
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
 <pre><code>/plugin marketplace add obra/superpowers
 /plugin install superpowers@obra</code></pre>
-    </div>
-    <div><strong>Корисні команди:</strong>
-      <ul class="commands-list">
-        <li><code>/superpowers:brainstorm</code><span class="cmd-desc">Обдумати нову фічу перед кодом</span></li>
-        <li><code>/superpowers:write-plan</code><span class="cmd-desc">Скласти детальний план задачі</span></li>
-        <li><code>/superpowers:execute-plan</code><span class="cmd-desc">Виконати план з контрольними точками</span></li>
-      </ul>
-    </div>
-  </article>
+        </div>
+        <details class="cmd-toggle">
+          <summary>Показати команди</summary>
+          <ul class="commands-list">
+            <li><code>/superpowers:brainstorm</code><span class="cmd-desc">Обдумати нову фічу</span></li>
+            <li><code>/superpowers:write-plan</code><span class="cmd-desc">Скласти план задачі</span></li>
+            <li><code>/superpowers:execute-plan</code><span class="cmd-desc">Виконати з чекпоінтами</span></li>
+          </ul>
+        </details>
+      </article>
 
-  <article class="plugin" id="p2">
-    <div class="plugin-rank">2</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">📚</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/anthropics/skills" target="_blank">Anthropic Skills</a></div>
-        <div class="plugin-stars">⭐ 128 000 зірок</div>
-      </div>
-    </div>
-    <div class="plugin-tagline">Офіційна збірка від творців Claude — робота з документами і не тільки</div>
-    <div class="plugin-meta">
-      <span class="meta-pill auto">🟢 Працює автоматично</span>
-      <span class="meta-pill cmd">🔵 Є слеш-команди</span>
-      <span class="meta-pill">anthropics/skills</span>
-    </div>
-    <p class="plugin-desc">Канонічний набір скілів від самих авторів Claude. Сюди входять інструменти для PowerPoint (.pptx), Word (.docx), Excel (.xlsx), PDF, перегляду відео, планування задач і консолідації пам'яті.</p>
-    <p class="plugin-desc">Просто скажіть «зроби презентацію про X» — і Claude підхопить скіл pptx, створить нормальний файл, а не просто текст. Те саме для Excel-таблиць з формулами, Word-документів з форматуванням, PDF з OCR.</p>
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
+      <article class="plugin">
+        <div class="plugin-rank">2</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">📚</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/anthropics/skills" target="_blank">Anthropic Skills</a></div>
+            <div class="plugin-stars">⭐ 128 000</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Офіційна збірка від творців Claude — робота з документами</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🟢 Авто</span>
+          <span class="meta-pill">🔵 Команди</span>
+          <span class="meta-pill repo">anthropics/skills</span>
+        </div>
+        <p class="plugin-desc">Канонічний набір скілів від авторів Claude. Сюди входять інструменти для PowerPoint, Word, Excel, PDF, перегляду відео, планування задач. Просто скажіть «зроби презентацію про X» — Claude підхопить скіл pptx, створить нормальний файл, а не просто текст.</p>
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
 <pre><code>/plugin marketplace add anthropics/skills
 /plugin install anthropic-skills@anthropics</code></pre>
+        </div>
+        <details class="cmd-toggle">
+          <summary>Показати команди</summary>
+          <ul class="commands-list">
+            <li><code>/schedule</code><span class="cmd-desc">Повторювана задача за розкладом</span></li>
+            <li><code>/watch &lt;url&gt;</code><span class="cmd-desc">Аналіз відео</span></li>
+          </ul>
+        </details>
+      </article>
     </div>
-    <div><strong>Корисні команди:</strong>
-      <ul class="commands-list">
-        <li><code>/schedule</code><span class="cmd-desc">Створити повторювану задачу за розкладом</span></li>
-        <li><code>/watch &lt;url&gt;</code><span class="cmd-desc">Подивитись і проаналізувати відео</span></li>
-      </ul>
-    </div>
-  </article>
+  </section>
 
-  <article class="plugin" id="p4">
-    <div class="plugin-rank">3</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">🔥</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/firecrawl/firecrawl" target="_blank">Firecrawl</a></div>
-        <div class="plugin-stars">⭐ 116 000 зірок</div>
+  <section class="category" id="cat-web">
+    <div class="category-header">
+      <div class="category-icon">🌐</div>
+      <div class="category-title-block">
+        <div class="category-title">Веб + браузер</div>
+        <div class="category-subtitle">Дайте Claude справжній браузер замість обмеженого пошуку</div>
       </div>
+      <span class="category-count">3 плагіни</span>
     </div>
-    <div class="plugin-tagline">Інтернет як на долоні — пошук, скрапінг, аналіз сайтів</div>
-    <div class="plugin-meta">
-      <span class="meta-pill auto">🟢 Працює автоматично</span>
-      <span class="meta-pill">firecrawl/firecrawl-mcp-server</span>
-    </div>
-    <p class="plugin-desc">Найпотужніший інструмент для роботи з інтернетом. Дає Claude можливість шукати в реальному часі, читати сторінки повністю (навіть динамічні JavaScript-сайти), завантажувати цілі розділи документації.</p>
-    <p class="plugin-desc">Якщо ви скажете «знайди мені статті про X» або «скрапни цю сторінку» — Claude автоматично використає Firecrawl. Це ніби дати помічнику справжній браузер замість обмеженого пошуку.</p>
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
+
+    <div class="plugin-grid cols-3">
+      <article class="plugin">
+        <div class="plugin-rank">3</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">🔥</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/firecrawl/firecrawl" target="_blank">Firecrawl</a></div>
+            <div class="plugin-stars">⭐ 116 000</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Інтернет як на долоні — пошук + скрапінг</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🟢 Авто</span>
+          <span class="meta-pill repo">firecrawl-mcp-server</span>
+        </div>
+        <p class="plugin-desc">Шукає в реальному часі, читає сторінки повністю (навіть динамічні JS-сайти), завантажує цілі розділи документації. Скажіть «знайди статті про X» — Claude автоматично використає Firecrawl.</p>
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
 <pre><code>/plugin marketplace add firecrawl/firecrawl-mcp-server
 /plugin install firecrawl</code></pre>
-    </div>
-    <div><strong>Як використовувати:</strong> просто пишіть людською мовою — «знайди в інтернеті», «прочитай цю сторінку», «зроби список усіх продуктів з сайту». Claude підбере правильний інструмент сам.</div>
-  </article>
+        </div>
+      </article>
 
-  <article class="plugin" id="p5">
-    <div class="plugin-rank">4</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">🎭</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/microsoft/playwright" target="_blank">Playwright</a></div>
-        <div class="plugin-stars">⭐ 88 000 зірок</div>
-      </div>
-    </div>
-    <div class="plugin-tagline">Браузерна автоматизація від Microsoft — точний контроль через скрипти</div>
-    <div class="plugin-meta">
-      <span class="meta-pill cmd">🔵 Через MCP / CLI</span>
-      <span class="meta-pill">microsoft/playwright</span>
-    </div>
-    <p class="plugin-desc">Промисловий стандарт для тестування і автоматизації веб-сторінок. Дозволяє Claude управляти Chromium, Firefox і WebKit через єдиний API: клікати, заповнювати форми, робити скріншоти, чекати на завантаження, перевіряти стан сторінок.</p>
-    <p class="plugin-desc">На відміну від Browser Harness, Playwright запускає <em>свій</em> ізольований браузер. Найкраще пасує коли потрібно: писати E2E-тести (з повторюваним результатом), скрейпити публічні сторінки, генерувати скріншоти для документації, автоматизувати на CI/CD без головного браузера користувача.</p>
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
-<pre><code># Через офіційний маркетплейс Anthropic:
-/plugin install playwright
-
-# Або як CLI глобально:
+      <article class="plugin">
+        <div class="plugin-rank">4</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">🎭</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/microsoft/playwright" target="_blank">Playwright</a></div>
+            <div class="plugin-stars">⭐ 88 000</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Браузерна автоматизація від Microsoft</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🔵 Через MCP</span>
+          <span class="meta-pill repo">microsoft/playwright</span>
+        </div>
+        <p class="plugin-desc">Промисловий стандарт для тестування веб-сторінок. Запускає <em>свій</em> ізольований браузер. Найкраще для: E2E-тестів, скрейпінгу публічних сторінок, автоматизації на CI/CD.</p>
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
+<pre><code>/plugin install playwright
+# Або як CLI:
 npm install -g @playwright/cli</code></pre>
-    </div>
-    <div><strong>Як використовувати:</strong> «протестуй цю форму», «зроби E2E тест для логіну», «перевір що сторінка відкривається у мобільному вигляді», «зроби скріншот сторінки X».</div>
-  </article>
+        </div>
+      </article>
 
-  <article class="plugin" id="p6">
-    <div class="plugin-rank">5</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">🎨</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank">UI/UX Pro Max</a></div>
-        <div class="plugin-stars">⭐ 74 000 зірок</div>
-      </div>
-    </div>
-    <div class="plugin-tagline">Дизайнер у голові — професійні інтерфейси автоматично</div>
-    <div class="plugin-meta">
-      <span class="meta-pill auto">🟢 Працює автоматично</span>
-      <span class="meta-pill">nextlevelbuilder/ui-ux-pro-max-skill</span>
-    </div>
-    <p class="plugin-desc">Гігантська база дизайн-знань: 50+ стилів (мінімалізм, brutalism, glassmorphism, неоморфізм…), 161 кольорова палітра, 57 пар шрифтів, 99 правил UX. Підтримує всі популярні фреймворки — React, Vue, Flutter, SwiftUI.</p>
-    <p class="plugin-desc">Перш ніж згенерувати UI, скіл прорахує підбір кольорів, типографіки, відступів, доступності. Просто скажіть «зроби лендінг для мого сервісу» — на виході отримаєте готову сторінку, що виглядає як від справжнього дизайнера.</p>
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
-<pre><code>/plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill
-/plugin install ui-ux-pro-max</code></pre>
-    </div>
-    <div><strong>Як використовувати:</strong> ключові слова в запиті — «дизайн», «створи лендінг», «admin panel», «SaaS dashboard». Активується сам.</div>
-  </article>
+      <article class="plugin">
+        <div class="plugin-rank">11</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">🌐</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/browser-use/browser-harness" target="_blank">Browser Harness</a></div>
+            <div class="plugin-stars">⭐ 11 000</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Прямий контроль вашого Chrome</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🔵 CLI</span>
+          <span class="meta-pill repo">browser-use/browser-harness</span>
+        </div>
+        <p class="plugin-desc">Управляє вашим живим Chrome — кликати, заповнювати форми, читати сторінки за вашими логінами. Не запускає окремий браузер. Корисно для адмінок і авторизованих сервісів.</p>
 
-  <article class="plugin" id="p7">
-    <div class="plugin-rank">6</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">🧠</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/thedotmack/claude-mem" target="_blank">Claude Memory</a></div>
-        <div class="plugin-stars">⭐ 73 000 зірок</div>
+        <div class="sub-skill" style="margin: 14px 0;">
+          <div class="sub-skill-name">🤔 Playwright vs Browser Harness</div>
+          <div class="sub-skill-desc">Тести/CI скрейпери — Playwright. Логіни/адмінки — Browser Harness.</div>
+        </div>
+
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
+<pre><code># Інструкція в репозиторії — CLI</code></pre>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="category" id="cat-memory">
+    <div class="category-header">
+      <div class="category-icon">🧠</div>
+      <div class="category-title-block">
+        <div class="category-title">Память + контекст</div>
+        <div class="category-subtitle">Щоб Claude нарешті памʼятав минулі сесії і свіжу документацію</div>
       </div>
+      <span class="category-count">2 плагіни</span>
     </div>
-    <div class="plugin-tagline">Claude нарешті почне пам'ятати минулі сесії</div>
-    <div class="plugin-meta">
-      <span class="meta-pill bg">🟣 Працює у фоні</span>
-      <span class="meta-pill cmd">🔵 Є команди</span>
-      <span class="meta-pill">thedotmack/claude-mem</span>
-    </div>
-    <p class="plugin-desc">Найбільший біль Claude — кожна нова розмова починається з нуля. Цей плагін це виправляє: він тихо записує все, що Claude робить (рішення, фікси, рефактори), стискає це і автоматично додає релевантні шматки в наступні сесії.</p>
-    <p class="plugin-desc">Простими словами — Claude нарешті «пам'ятає», як ви розв'язували схожу задачу минулого тижня, які баги фіксили місяць тому, які підходи спрацювали. Це окремий шар поза стандартним налаштуванням пам'яті.</p>
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
+
+    <div class="plugin-grid cols-2">
+      <article class="plugin">
+        <div class="plugin-rank">5</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">🧠</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/thedotmack/claude-mem" target="_blank">Claude Memory</a></div>
+            <div class="plugin-stars">⭐ 73 000</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Claude нарешті почне памʼятати минулі сесії</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🟣 Фон</span>
+          <span class="meta-pill">🔵 Команди</span>
+          <span class="meta-pill repo">thedotmack/claude-mem</span>
+        </div>
+        <p class="plugin-desc">Кожна нова розмова починається з нуля? Цей плагін це виправляє: тихо записує що Claude робить (рішення, фікси, рефактори), стискає це і автоматично додає в наступні сесії. Claude памʼятає як ви розвʼязували задачу минулого тижня.</p>
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
 <pre><code>/plugin marketplace add thedotmack/claude-mem
 /plugin install claude-mem</code></pre>
-    </div>
-    <div><strong>Корисні команди:</strong>
-      <ul class="commands-list">
-        <li><code>/claude-mem:make-plan</code><span class="cmd-desc">План з урахуванням минулого досвіду</span></li>
-        <li><code>/claude-mem:do</code><span class="cmd-desc">Виконати план через помічників</span></li>
-      </ul>
-    </div>
-  </article>
+        </div>
+        <details class="cmd-toggle">
+          <summary>Показати команди</summary>
+          <ul class="commands-list">
+            <li><code>/claude-mem:make-plan</code><span class="cmd-desc">План з минулим досвідом</span></li>
+            <li><code>/claude-mem:do</code><span class="cmd-desc">Виконати через помічників</span></li>
+          </ul>
+        </details>
+      </article>
 
-  <article class="plugin" id="p8">
-    <div class="plugin-rank">7</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">📖</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/upstash/context7" target="_blank">Context7</a></div>
-        <div class="plugin-stars">⭐ 55 000 зірок</div>
-      </div>
-    </div>
-    <div class="plugin-tagline">Свіжа документація бібліотек прямо в Claude</div>
-    <div class="plugin-meta">
-      <span class="meta-pill auto">🟢 Працює автоматично</span>
-      <span class="meta-pill">upstash/context7</span>
-    </div>
-    <p class="plugin-desc">Проблема: Claude вчили на даних, що могли застаріти на місяці. Документація React, Next.js, Tailwind змінюється швидко. Context7 розв'язує це — підтягує актуальну документацію бібліотек прямо в Claude під час роботи.</p>
-    <p class="plugin-desc">Замість галюцинацій про застарілі API ви отримуєте реальні приклади з останньої версії. Особливо корисно для популярних інструментів: React, Vue, Prisma, Tailwind, Django, Spring Boot.</p>
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
-<pre><code># Через офіційний маркетплейс Anthropic:
+      <article class="plugin">
+        <div class="plugin-rank">6</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">📖</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/upstash/context7" target="_blank">Context7</a></div>
+            <div class="plugin-stars">⭐ 55 000</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Свіжа документація бібліотек прямо в Claude</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🟢 Авто</span>
+          <span class="meta-pill repo">upstash/context7</span>
+        </div>
+        <p class="plugin-desc">Claude вчили на даних, що могли застаріти на місяці. Context7 підтягує актуальну документацію бібліотек: React, Next.js, Tailwind, Prisma, Django. Замість галюцинацій про старі API — реальні приклади з останньої версії.</p>
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
+<pre><code># Через офіційний маркетплейс:
 /plugin install context7</code></pre>
+        </div>
+      </article>
     </div>
-    <div><strong>Як використовувати:</strong> просто питайте про API будь-якої бібліотеки — Claude автоматично перевірить документацію.</div>
-  </article>
+  </section>
 
-  <article class="plugin" id="p9">
-    <div class="plugin-rank">8</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">🏛️</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/anthropics/claude-plugins-official" target="_blank">Anthropic Plugins (Official)</a></div>
-        <div class="plugin-stars">⭐ 19 000 зірок</div>
+  <section class="category" id="cat-design">
+    <div class="category-header">
+      <div class="category-icon">🎨</div>
+      <div class="category-title-block">
+        <div class="category-title">Дизайн</div>
+        <div class="category-subtitle">Інтерфейси без типового AI-вигляду</div>
       </div>
-    </div>
-    <div class="plugin-tagline">Офіційний магазин плагінів — більшість встановлюється з коробки</div>
-    <div class="plugin-meta">
-      <span class="meta-pill cmd">🔵 Багато слеш-команд</span>
-      <span class="meta-pill">anthropics/claude-plugins-official</span>
-    </div>
-    <p class="plugin-desc">Це не один плагін, а ціла директорія від Anthropic. Маркетплейс уже додано за замовчуванням — просто пишете <code>/plugin install &lt;ім'я&gt;</code>. Звідси беруться найкорисніші інструменти для розробників.</p>
-
-    <div class="sub-skill">
-      <div class="sub-skill-name">🎨 frontend-design</div>
-      <div class="sub-skill-desc">Створення красивих інтерфейсів без типового AI-вигляду.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">🔍 code-review</div>
-      <div class="sub-skill-desc">Перевірка коду перед відправкою в репозиторій. Команда: <code>/code-review:code-review</code></div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">⚙️ claude-code-setup</div>
-      <div class="sub-skill-desc">Аналізує ваш проєкт і рекомендує які плагіни поставити.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">🛠️ skill-creator</div>
-      <div class="sub-skill-desc">Допомагає створювати власні скіли під ваші повторювані задачі.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">📝 commit-commands / pr-review-toolkit</div>
-      <div class="sub-skill-desc">Стандартизація коміт-повідомлень і робота з Pull Request.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">🌐 LSP-плагіни</div>
-      <div class="sub-skill-desc">typescript-lsp, pyright-lsp (Python), gopls-lsp (Go), rust-analyzer-lsp і багато інших — точні go-to-definition і refactor.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">🔗 Інтеграції (external_plugins)</div>
-      <div class="sub-skill-desc">github, gitlab, linear, asana, discord, telegram, firebase, terraform, <strong>playwright</strong>, <strong>context7</strong>, serena, greptile, imessage — підключають зовнішні сервіси.</div>
+      <span class="category-count">2 плагіни</span>
     </div>
 
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
-<pre><code># Маркетплейс вже доданий — просто:
-/plugin install code-review
-/plugin install frontend-design
-/plugin install playwright
-# і так далі</code></pre>
-    </div>
-  </article>
+    <div class="plugin-grid cols-2">
+      <article class="plugin">
+        <div class="plugin-rank">7</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">🎨</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank">UI/UX Pro Max</a></div>
+            <div class="plugin-stars">⭐ 74 000</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Дизайнер у голові — професійні інтерфейси</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🟢 Авто</span>
+          <span class="meta-pill repo">ui-ux-pro-max-skill</span>
+        </div>
+        <p class="plugin-desc">Гігантська база: 50+ стилів (мінімалізм, brutalism, glassmorphism), 161 палітра, 57 пар шрифтів, 99 правил UX. React, Vue, Flutter, SwiftUI. Скажіть «зроби лендінг» — отримаєте сторінку від справжнього дизайнера.</p>
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
+<pre><code>/plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill
+/plugin install ui-ux-pro-max</code></pre>
+        </div>
+      </article>
 
-  <article class="plugin" id="p10">
-    <div class="plugin-rank">9</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">💼</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/anthropics/knowledge-work-plugins" target="_blank">Knowledge Work Plugins</a></div>
-        <div class="plugin-stars">⭐ 12 000 зірок</div>
-      </div>
-    </div>
-    <div class="plugin-tagline">Плагіни для не-програмістів — дизайнерів, маркетологів, юристів</div>
-    <div class="plugin-meta">
-      <span class="meta-pill auto">🟢 Працюють автоматично</span>
-      <span class="meta-pill">anthropics/knowledge-work-plugins</span>
-    </div>
-    <p class="plugin-desc">Окремий маркетплейс для офісної роботи: design, customer-support, finance, HR, legal, marketing, operations, sales. Все, що потрібно команді поза розробкою.</p>
-
-    <div class="sub-skill">
-      <div class="sub-skill-name">🎨 design (плагін)</div>
-      <div class="sub-skill-desc">7 скілів для дизайнерів: user research, accessibility audit (WCAG 2.1 AA), design system, design critique, handoff для розробника, UX copywriting, синтез досліджень.</div>
-    </div>
-
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
-<pre><code>/plugin marketplace add anthropics/knowledge-work-plugins
-/plugin install design@knowledge-work</code></pre>
-    </div>
-  </article>
-
-  <article class="plugin" id="p11">
-    <div class="plugin-rank">10</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">🌐</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/browser-use/browser-harness" target="_blank">Browser Harness</a></div>
-        <div class="plugin-stars">⭐ 11 000 зірок</div>
-      </div>
-    </div>
-    <div class="plugin-tagline">Прямий контроль вашого Chrome — без логінів і авторизацій</div>
-    <div class="plugin-meta">
-      <span class="meta-pill cmd">🔵 Через CLI</span>
-      <span class="meta-pill">browser-use/browser-harness</span>
-    </div>
-    <p class="plugin-desc">Дозволяє Claude управляти вашим живим Chrome — кликати кнопки, заповнювати форми, робити скріншоти, читати сторінки за вашими логінами. Не запускає окремий браузер — підключається до того, що вже відкрито.</p>
-    <p class="plugin-desc">Корисно коли потрібно автоматизувати рутину в авторизованих сервісах: «зайди в мою адмінку і витягни список продажів», «заповни цю довгу форму», «зроби expert-режим у Notion». Працює на рівні браузера, тож не вимагає API.</p>
-
-    <div class="compare-block">
-      <strong>🤔 Playwright vs Browser Harness — коли що використовувати?</strong>
-      <ul>
-        <li><strong>Playwright</strong> — коли потрібен <em>стабільний скрипт</em>: тести, скрейпери на CI, повторювані операції на чистому браузері.</li>
-        <li><strong>Browser Harness</strong> — коли потрібен <em>живий контроль</em>: робота в авторизованих сервісах (адмінки, банки, корпоративні портали), де ви вже залогінені у своєму Chrome.</li>
-      </ul>
-      <p style="margin-top: 8px; color: var(--text-dim); font-size: 0.9rem;">💡 Просте правило: треба ввести логін і пароль? — Browser Harness. Треба написати тест? — Playwright.</p>
-    </div>
-
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
-<pre><code># Інструкція в репозиторії — встановлюється як CLI</code></pre>
-    </div>
-  </article>
-
-  <article class="plugin" id="p12">
-    <div class="plugin-rank">11</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">👥</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/daymade/claude-code-skills" target="_blank">Community Skills (daymade)</a></div>
-        <div class="plugin-stars">⭐ 1 000 зірок</div>
-      </div>
-    </div>
-    <div class="plugin-tagline">~50 production-готових скілів від спільноти</div>
-    <div class="plugin-meta">
-      <span class="meta-pill">daymade/claude-code-skills</span>
-    </div>
-    <p class="plugin-desc">Найбільший community-маркетплейс з конкретними скілами під щоденні задачі — те, чого немає в офіційному. Замість загальних дисциплінарних скілів — вузькоспеціалізовані помічники.</p>
-
-    <div class="sub-skill">
-      <div class="sub-skill-name">📊 excel-automation</div>
-      <div class="sub-skill-desc">Автоматизація Excel-задач: формули, зведені таблиці, очистка даних, побудова графіків.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">🐙 github-ops</div>
-      <div class="sub-skill-desc">Робота з GitHub — issues, PR, релізи, GitHub Actions, безпечні merge-стратегії.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">🌐 debugging-network-issues</div>
-      <div class="sub-skill-desc">Дебаг мережі — DNS, TCP, HTTP, латентність, втрати пакетів. Аналізує traceroute і curl.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">🔬 deep-research</div>
-      <div class="sub-skill-desc">Глибокий дослідницький звіт з кількох джерел — для маркет-аналізу, конкурентної розвідки, технічних оглядів.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">🎤 slides-creator</div>
-      <div class="sub-skill-desc">Презентації під ключ — структура, наратив, дизайн слайдів, експорт у PPTX/PDF.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">✨ prompt-optimizer</div>
-      <div class="sub-skill-desc">Покращення ваших промптів для кращих результатів від AI-моделей.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">🎬 cli-demo-generator</div>
-      <div class="sub-skill-desc">Створення анімованих демо роботи CLI-утиліт для README і документації.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">🌍 i18n-expert</div>
-      <div class="sub-skill-desc">Інтернаціоналізація — переклади, RTL-розкладка, формати дат і чисел, плюрали.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">☁️ cloudflare-troubleshooting</div>
-      <div class="sub-skill-desc">Дебаг Cloudflare — Workers, Pages, KV, R2, DNS, security rules.</div>
-    </div>
-    <div class="sub-skill">
-      <div class="sub-skill-name">🔍 fact-checker</div>
-      <div class="sub-skill-desc">Перевірка фактів у документах через крос-референси з кількох джерел.</div>
-    </div>
-
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
-<pre><code>/plugin marketplace add daymade/claude-code-skills
-/plugin install excel-automation@daymade
-/plugin install github-ops@daymade
-# тощо — повний список у репозиторії</code></pre>
-    </div>
-  </article>
-
-  <article class="plugin" id="p13">
-    <div class="plugin-rank">12</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">🤖</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/FrancyJGLisboa/agent-skill-creator" target="_blank">Agent Skill Creator</a></div>
-        <div class="plugin-stars">⭐ 855 зірок</div>
-      </div>
-    </div>
-    <div class="plugin-tagline">Створіть свій скіл, навіть якщо ніколи не програмували</div>
-    <div class="plugin-meta">
-      <span class="meta-pill auto">🟢 Працює автоматично</span>
-      <span class="meta-pill">FrancyJGLisboa/agent-skill-creator</span>
-    </div>
-    <p class="plugin-desc">Розкажіть текстом про свою щоденну рутину — плагін перетворить це на новий скіл. Може брати транскрипти зустрічей, описи процесів, навіть «що я роблю щоп'ятниці» і автоматизувати це.</p>
-    <p class="plugin-desc">Підтримує одиночні скіли, набори агентів, шаблони, експорт між Claude Code, Copilot CLI, Gemini CLI. Ідеально коли ви знаєте що хочете автоматизувати, але не знаєте як.</p>
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
-<pre><code>/plugin marketplace add FrancyJGLisboa/agent-skill-creator
-/plugin install agent-skill-creator</code></pre>
-    </div>
-    <div><strong>Як використовувати:</strong> скажіть «створи мені скіл для…» або «автоматизуй цей процес».</div>
-  </article>
-
-  <article class="plugin" id="p14">
-    <div class="plugin-rank">13</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">🖼️</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/aboul3ata/lazyweb-skill" target="_blank">Lazyweb</a></div>
-        <div class="plugin-stars">⭐ 203 зірки</div>
-      </div>
-    </div>
-    <div class="plugin-tagline">Дизайн-натхнення з реальних додатків — як Pinterest для UI</div>
-    <div class="plugin-meta">
-      <span class="meta-pill auto">🟢 Працює автоматично</span>
-      <span class="meta-pill">aboul3ata/lazyweb-skill</span>
-    </div>
-    <p class="plugin-desc">Замість того щоб генерувати дизайн «з голови», Lazyweb шукає референси з живих продуктів. Можна підключити Mobbin, Savee, Dribbble, Behance як джерела натхнення.</p>
-    <p class="plugin-desc">Найцікавіше — вміє «крос-полінізувати»: показує референси з несуміжних доменів. Наприклад, питаєте про дизайн банку — він покаже фітнес-додатки і ресторанні меню. Допомагає вийти за рамки шаблонного мислення.</p>
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
+      <article class="plugin">
+        <div class="plugin-rank">13</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">🖼️</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/aboul3ata/lazyweb-skill" target="_blank">Lazyweb</a></div>
+            <div class="plugin-stars">⭐ 203</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Pinterest для UI-натхнення</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🟢 Авто</span>
+          <span class="meta-pill repo">aboul3ata/lazyweb-skill</span>
+        </div>
+        <p class="plugin-desc">Замість дизайну «з голови» — шукає референси з живих продуктів. Mobbin, Savee, Dribbble, Behance як джерела. Найцікавіше — крос-полінізує: банк → фітнес-додатки + ресторанні меню. <strong>Цю сторінку покращено саме через нього.</strong></p>
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
 <pre><code>/plugin marketplace add aboul3ata/lazyweb-skill
 /plugin install lazyweb</code></pre>
+        </div>
+      </article>
     </div>
-    <div><strong>Як використовувати:</strong> «покращ цей дизайн», «покажи приклади onboarding», «як це робить Spotify».</div>
-  </article>
+  </section>
 
-  <article class="plugin" id="p15">
-    <div class="plugin-rank">14</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">📱</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/k1p1l0/claude-telegram-supercharged" target="_blank">Telegram Supercharged</a></div>
-        <div class="plugin-stars">⭐ 98 зірок</div>
+  <section class="category" id="cat-plugins">
+    <div class="category-header">
+      <div class="category-icon">🛠️</div>
+      <div class="category-title-block">
+        <div class="category-title">Плагіни / скіли</div>
+        <div class="category-subtitle">Маркетплейси з готовими інструментами для всього</div>
       </div>
+      <span class="category-count">4 плагіни</span>
     </div>
-    <div class="plugin-tagline">Контролюйте Claude з телефону через Telegram</div>
-    <div class="plugin-meta">
-      <span class="meta-pill auto">🟢 Працює автоматично</span>
-      <span class="meta-pill">k1p1l0/claude-telegram-supercharged</span>
+
+    <div class="plugin-grid cols-2">
+      <article class="plugin">
+        <div class="plugin-rank">8</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">🏛️</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/anthropics/claude-plugins-official" target="_blank">Anthropic Plugins (Official)</a></div>
+            <div class="plugin-stars">⭐ 19 000</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Офіційний магазин — встановлюється з коробки</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🔵 Команди</span>
+          <span class="meta-pill repo">anthropics/claude-plugins-official</span>
+        </div>
+        <p class="plugin-desc">Ціла директорія від Anthropic. Маркетплейс уже доданий — просто <code>/plugin install &lt;ім'я&gt;</code>. Звідси беруться найкорисніші розробницькі інструменти.</p>
+
+        <div class="sub-skill"><div class="sub-skill-name">🎨 frontend-design</div><div class="sub-skill-desc">Красиві інтерфейси без AI-вигляду.</div></div>
+        <div class="sub-skill"><div class="sub-skill-name">🔍 code-review</div><div class="sub-skill-desc">Перевірка коду перед merge. <code>/code-review:code-review</code></div></div>
+        <div class="sub-skill"><div class="sub-skill-name">⚙️ claude-code-setup</div><div class="sub-skill-desc">Аналізує проєкт, рекомендує плагіни.</div></div>
+        <div class="sub-skill"><div class="sub-skill-name">🛠️ skill-creator</div><div class="sub-skill-desc">Створення власних скілів.</div></div>
+        <div class="sub-skill"><div class="sub-skill-name">🌐 LSP-плагіни</div><div class="sub-skill-desc">typescript-lsp, pyright-lsp, gopls, rust-analyzer.</div></div>
+        <div class="sub-skill"><div class="sub-skill-name">🔗 Інтеграції</div><div class="sub-skill-desc">github, gitlab, linear, asana, telegram, firebase, terraform, playwright, context7.</div></div>
+
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
+<pre><code># Маркетплейс вже доданий:
+/plugin install code-review
+/plugin install frontend-design</code></pre>
+        </div>
+      </article>
+
+      <article class="plugin">
+        <div class="plugin-rank">9</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">💼</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/anthropics/knowledge-work-plugins" target="_blank">Knowledge Work Plugins</a></div>
+            <div class="plugin-stars">⭐ 12 000</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Для не-програмістів: дизайнерів, маркетологів, юристів</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🟢 Авто</span>
+          <span class="meta-pill repo">knowledge-work-plugins</span>
+        </div>
+        <p class="plugin-desc">Окремий маркетплейс для офісної роботи: design, customer-support, finance, HR, legal, marketing, operations, sales.</p>
+        <div class="sub-skill"><div class="sub-skill-name">🎨 design (плагін)</div><div class="sub-skill-desc">7 скілів: user research, accessibility (WCAG 2.1 AA), design system, design critique, handoff, UX copy, research synthesis.</div></div>
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
+<pre><code>/plugin marketplace add anthropics/knowledge-work-plugins
+/plugin install design@knowledge-work</code></pre>
+        </div>
+      </article>
+
+      <article class="plugin">
+        <div class="plugin-rank">10</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">👥</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/daymade/claude-code-skills" target="_blank">Community Skills</a></div>
+            <div class="plugin-stars">⭐ 1 000</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">~50 production-готових скілів від спільноти</div>
+        <div class="plugin-meta">
+          <span class="meta-pill repo">daymade/claude-code-skills</span>
+        </div>
+        <p class="plugin-desc">Найбільший community-маркетплейс з конкретними скілами під щоденні задачі.</p>
+        <div class="sub-skill"><div class="sub-skill-name">📊 excel-automation</div><div class="sub-skill-desc">Автоматизація Excel — формули, зведені, графіки.</div></div>
+        <div class="sub-skill"><div class="sub-skill-name">🐙 github-ops</div><div class="sub-skill-desc">Issues, PR, релізи, GitHub Actions.</div></div>
+        <div class="sub-skill"><div class="sub-skill-name">🌐 debugging-network-issues</div><div class="sub-skill-desc">DNS, TCP, HTTP, латентність.</div></div>
+        <div class="sub-skill"><div class="sub-skill-name">🔬 deep-research</div><div class="sub-skill-desc">Звіт з кількох джерел.</div></div>
+        <div class="sub-skill"><div class="sub-skill-name">🎤 slides-creator</div><div class="sub-skill-desc">Презентації під ключ.</div></div>
+        <div class="sub-skill"><div class="sub-skill-name">✨ prompt-optimizer</div><div class="sub-skill-desc">Покращення ваших промптів.</div></div>
+        <div class="sub-skill"><div class="sub-skill-name">🌍 i18n-expert</div><div class="sub-skill-desc">Переклади, RTL, формати.</div></div>
+        <div class="sub-skill"><div class="sub-skill-name">☁️ cloudflare-troubleshooting</div><div class="sub-skill-desc">Workers, Pages, KV, R2.</div></div>
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
+<pre><code>/plugin marketplace add daymade/claude-code-skills
+/plugin install excel-automation@daymade</code></pre>
+        </div>
+      </article>
+
+      <article class="plugin">
+        <div class="plugin-rank">12</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">🤖</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/FrancyJGLisboa/agent-skill-creator" target="_blank">Agent Skill Creator</a></div>
+            <div class="plugin-stars">⭐ 855</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Створіть свій скіл, навіть якщо не програмували</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🟢 Авто</span>
+          <span class="meta-pill repo">agent-skill-creator</span>
+        </div>
+        <p class="plugin-desc">Розкажіть про щоденну рутину — плагін перетворить це на новий скіл. Транскрипти, описи процесів, навіть «що я роблю щопʼятниці».</p>
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
+<pre><code>/plugin marketplace add FrancyJGLisboa/agent-skill-creator
+/plugin install agent-skill-creator</code></pre>
+        </div>
+      </article>
     </div>
-    <p class="plugin-desc">Покращена версія офіційного Telegram-плагіна. Дозволяє давати Claude задачі через Telegram-бота прямо з телефону: пишете повідомлення з дороги — Claude виконує на робочому компʼютері.</p>
-    <p class="plugin-desc">Підтримує треди, голосові повідомлення в обидва боки, стікери, GIF-анімації, реакції. Drop-in заміна, тож якщо вже використовуєте офіційний — просто оновлюєтесь і отримуєте більше можливостей.</p>
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
+  </section>
+
+  <section class="category" id="cat-life">
+    <div class="category-header">
+      <div class="category-icon">📱</div>
+      <div class="category-title-block">
+        <div class="category-title">Якість життя</div>
+        <div class="category-subtitle">Малі речі, які змінюють щоденний досвід</div>
+      </div>
+      <span class="category-count">2 плагіни</span>
+    </div>
+
+    <div class="plugin-grid cols-2">
+      <article class="plugin">
+        <div class="plugin-rank">14</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">📱</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/k1p1l0/claude-telegram-supercharged" target="_blank">Telegram Supercharged</a></div>
+            <div class="plugin-stars">⭐ 98</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Контролюйте Claude з телефону через Telegram</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🟢 Авто</span>
+          <span class="meta-pill repo">claude-telegram-supercharged</span>
+        </div>
+        <p class="plugin-desc">Покращена версія офіційного. Задачі через Telegram з телефону: пишете з дороги — Claude виконує на компʼютері. Треди, voice messages, стікери, GIF, реакції.</p>
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
 <pre><code>/plugin marketplace add k1p1l0/claude-telegram-supercharged
 /plugin install telegram-supercharged</code></pre>
-    </div>
-    <div><strong>Як налаштувати:</strong> отримайте токен у @BotFather в Telegram, передайте в Claude — далі він проведе через всі кроки.</div>
-  </article>
+        </div>
+      </article>
 
-  <article class="plugin" id="p16">
-    <div class="plugin-rank">15</div>
-    <div class="plugin-header">
-      <div class="plugin-icon">🪨</div>
-      <div class="plugin-title-block">
-        <div class="plugin-name"><a href="https://github.com/Shawnchee/caveman-skill" target="_blank">Caveman Mode</a></div>
-        <div class="plugin-stars">⭐ 62 зірки</div>
-      </div>
-    </div>
-    <div class="plugin-tagline">Економія токенів ~75% — Claude говорить як кам'яний геній</div>
-    <div class="plugin-meta">
-      <span class="meta-pill cmd">🔵 Через команди</span>
-      <span class="meta-pill">Shawnchee/caveman-skill</span>
-    </div>
-    <p class="plugin-desc">Викидає всі «зайві» слова з відповідей Claude — артиклі, ввічливості, hedging-фрази. Зберігає 100% технічного змісту, але економить ~75% токенів. Має рівні: лайт, повний, ультра.</p>
-    <p class="plugin-desc">Корисно для довгих сесій, коли контекст обмежений. Для кодів, комітів, попереджень про безпеку — автоматично перемикається в нормальний режим (auto-clarity), щоб уникнути двозначності.</p>
-    <div class="install-block">
-      <div class="install-block-label">📥 Встановлення</div>
+      <article class="plugin">
+        <div class="plugin-rank">15</div>
+        <div class="plugin-header">
+          <div class="plugin-icon">🪨</div>
+          <div class="plugin-title-block">
+            <div class="plugin-name"><a href="https://github.com/Shawnchee/caveman-skill" target="_blank">Caveman Mode</a></div>
+            <div class="plugin-stars">⭐ 62</div>
+          </div>
+        </div>
+        <div class="plugin-tagline">Економія токенів ~75% — Claude як кам'яний геній</div>
+        <div class="plugin-meta">
+          <span class="meta-pill">🔵 Команди</span>
+          <span class="meta-pill repo">Shawnchee/caveman-skill</span>
+        </div>
+        <p class="plugin-desc">Викидає «зайві» слова — артиклі, ввічливості, hedging. Зберігає 100% технічного змісту. Рівні: лайт / повний / ультра. Корисно для довгих сесій.</p>
+        <div class="install-block">
+          <div class="install-block-label">📥 Встановлення</div>
 <pre><code>/plugin marketplace add Shawnchee/caveman-skill
 /plugin install caveman</code></pre>
+        </div>
+        <details class="cmd-toggle">
+          <summary>Показати команди</summary>
+          <ul class="commands-list">
+            <li><code>/caveman lite|full|ultra</code><span class="cmd-desc">Рівень стиснення</span></li>
+            <li><code>/caveman-stats</code><span class="cmd-desc">Економія токенів</span></li>
+            <li><code>stop caveman</code><span class="cmd-desc">Назад до нормальної мови</span></li>
+          </ul>
+        </details>
+      </article>
     </div>
-    <div><strong>Корисні команди:</strong>
-      <ul class="commands-list">
-        <li><code>/caveman lite|full|ultra</code><span class="cmd-desc">Перемкнути рівень стиснення</span></li>
-        <li><code>/caveman-stats</code><span class="cmd-desc">Скільки токенів зекономлено</span></li>
-        <li><code>/caveman-help</code><span class="cmd-desc">Довідник усіх команд</span></li>
-        <li><code>stop caveman</code><span class="cmd-desc">Повернутись до нормальної мови</span></li>
-      </ul>
+  </section>
+
+  <h2 class="section-title" id="mcps">🛰️ MCP-сервери</h2>
+  <p style="color: var(--text-dim); margin-bottom: 24px; font-size: 1rem;">Окремі програми, які підключають Claude до зовнішніх сервісів.</p>
+
+  <div class="mini-grid">
+    <div class="mini-card">
+      <h4><a href="https://stitch.googleapis.com/" target="_blank">🪡 Stitch (Google)</a> <span class="stars-mini">Google product</span></h4>
+      <p>Експериментальний MCP від Google для генерації UI-макетів. Скажіть «створи дизайн ландінгу» — отримаєте структурований макет.</p>
+      <pre><code>claude mcp add stitch https://stitch.googleapis.com/mcp --transport http</code></pre>
     </div>
-  </article>
 
-  <h2 class="section-title" id="mcps">🛰️ MCP-сервери (поза плагінами)</h2>
-  <p style="color: var(--text-dim); margin-bottom: 24px;">MCP-сервер — окрема програма, яку Claude підключає для нових можливостей. Часто йдуть із плагінами, але деякі варто поставити окремо.</p>
-
-  <div class="mini-card">
-    <h4><a href="https://stitch.googleapis.com/" target="_blank">🪡 Stitch (Google)</a> <span class="stars-mini">⭐ Google product</span></h4>
-    <p>Експериментальний MCP від Google для генерації UI-макетів. Скажіть «створи мені дизайн ландінгу для X» — отримаєте структурований макет, який можна одразу імпортувати у Figma або скопіювати у Tailwind-код.</p>
-    <pre><code>claude mcp add stitch https://stitch.googleapis.com/mcp --transport http</code></pre>
-  </div>
-
-  <div class="mini-card">
-    <h4><a href="https://github.com/vredrick/n8n-mcp" target="_blank">🔗 n8n MCP</a> <span class="stars-mini">⭐ workflow automation</span></h4>
-    <p>Підключення до n8n — open-source no-code платформи автоматизації (~95k зірок саме у n8n). Через MCP Claude може створювати, редагувати, запускати ваші workflow: «створи мені ланцюжок: Telegram повідомлення → ChatGPT → запис у Google Sheet».</p>
-    <pre><code>npm install -g n8n-mcp
+    <div class="mini-card">
+      <h4><a href="https://github.com/vredrick/n8n-mcp" target="_blank">🔗 n8n MCP</a> <span class="stars-mini">workflow</span></h4>
+      <p>Підключення до n8n — open-source платформи автоматизації. Створює, редагує, запускає ваші workflow.</p>
+      <pre><code>npm install -g n8n-mcp
 claude mcp add n8n npx n8n-mcp</code></pre>
-  </div>
+    </div>
 
-  <div class="mini-card">
-    <h4><a href="https://github.com/modelcontextprotocol/servers" target="_blank">📦 Офіційний реєстр MCP-серверів</a> <span class="stars-mini">⭐ 85 000</span></h4>
-    <p>Колекція офіційних MCP-серверів від команди MCP: <code>memory</code> (вбудована памʼять), <code>filesystem</code>, <code>git</code>, <code>github</code>, <code>sqlite</code>, <code>postgres</code>, <code>puppeteer</code>, <code>brave-search</code> та інші. Якщо щось вам потрібне — спочатку перевірте чи воно вже є тут.</p>
-    <pre><code># Приклад — підключити memory сервер:
-npm install -g @modelcontextprotocol/server-memory
+    <div class="mini-card">
+      <h4><a href="https://github.com/modelcontextprotocol/servers" target="_blank">📦 Офіційний реєстр MCP</a> <span class="stars-mini">⭐ 85 000</span></h4>
+      <p>Колекція офіційних MCP: <code>memory</code>, <code>filesystem</code>, <code>git</code>, <code>github</code>, <code>sqlite</code>, <code>postgres</code>, <code>puppeteer</code>, <code>brave-search</code>.</p>
+      <pre><code>npm install -g @modelcontextprotocol/server-memory
 claude mcp add memory npx @modelcontextprotocol/server-memory</code></pre>
+    </div>
   </div>
 
-  <h2 class="section-title" id="clis">⌨️ CLI-інструменти у тандемі з Claude</h2>
-  <p style="color: var(--text-dim); margin-bottom: 24px;">Claude може запускати будь-який CLI через Bash. Ось ті, що варто мати глобально — Claude буде використовувати їх автоматично.</p>
+  <h2 class="section-title" id="clis">⌨️ CLI-інструменти</h2>
+  <p style="color: var(--text-dim); margin-bottom: 24px; font-size: 1rem;">Claude може запускати будь-який CLI через Bash. Ось ті, що варто мати глобально.</p>
 
-  <div class="mini-card">
-    <h4><a href="https://cli.github.com/" target="_blank">🐙 gh — GitHub CLI</a> <span class="stars-mini">офіційний</span></h4>
-    <p>Робота з GitHub з командного рядка: PR, issues, releases, workflows, репозиторії. Claude використовує його для перегляду PR, створення issues, перевірки CI-статусу. Без цього багато github-сценаріїв не запрацюють.</p>
-    <pre><code>brew install gh
+  <div class="mini-grid">
+    <div class="mini-card">
+      <h4><a href="https://cli.github.com/" target="_blank">🐙 gh — GitHub CLI</a> <span class="stars-mini">офіційний</span></h4>
+      <p>Робота з GitHub з терміналу: PR, issues, releases, workflows.</p>
+      <pre><code>brew install gh
 gh auth login</code></pre>
-  </div>
+    </div>
 
-  <div class="mini-card">
-    <h4><a href="https://github.com/googleworkspace/cli" target="_blank">📊 gws — Google Workspace CLI</a> <span class="stars-mini">⭐ 26 000</span></h4>
-    <p>Робота з Drive, Sheets, Docs, Gmail, Calendar з терміналу. Claude може створювати документи, читати таблиці, надсилати листи від вашого імені.</p>
-    <pre><code>npm install -g @googleworkspace/cli
+    <div class="mini-card">
+      <h4><a href="https://github.com/googleworkspace/cli" target="_blank">📊 gws — Google Workspace</a> <span class="stars-mini">⭐ 26 000</span></h4>
+      <p>Drive, Sheets, Docs, Gmail, Calendar з терміналу.</p>
+      <pre><code>npm install -g @googleworkspace/cli
 gws auth login</code></pre>
-  </div>
+    </div>
 
-  <div class="mini-card">
-    <h4><a href="https://github.com/vercel/vercel" target="_blank">▲ vercel — Vercel CLI</a> <span class="stars-mini">⭐ 15 000</span></h4>
-    <p>Деплой проєктів на Vercel. Claude уміє за командою «задеплой» зібрати білд, налаштувати env-змінні, прив'язати домени.</p>
-    <pre><code>npm install -g vercel
+    <div class="mini-card">
+      <h4><a href="https://github.com/vercel/vercel" target="_blank">▲ vercel</a> <span class="stars-mini">⭐ 15 000</span></h4>
+      <p>Деплой проєктів на Vercel. Білд, env-змінні, домени за командою.</p>
+      <pre><code>npm install -g vercel
 vercel login</code></pre>
+    </div>
+
+    <div class="mini-card">
+      <h4><a href="https://github.com/firecrawl/firecrawl-cli" target="_blank">🔥 firecrawl-cli</a> <span class="stars-mini">пара до плагіна</span></h4>
+      <p>Командний інтерфейс до Firecrawl для скриптів і CI.</p>
+      <pre><code>npm install -g firecrawl-cli</code></pre>
+    </div>
+
+    <div class="mini-card">
+      <h4><a href="https://playwright.dev/" target="_blank">🎭 playwright-cli</a> <span class="stars-mini">пара до плагіна</span></h4>
+      <p>CLI до Playwright — автотести і скрейпінг скриптами без MCP.</p>
+      <pre><code>npm install -g @playwright/cli</code></pre>
+    </div>
   </div>
 
-  <div class="mini-card">
-    <h4><a href="https://github.com/firecrawl/firecrawl-cli" target="_blank">🔥 firecrawl — Firecrawl CLI</a> <span class="stars-mini">пара до плагіна</span></h4>
-    <p>Командний інтерфейс до Firecrawl для скриптів і CI. Працює без MCP — корисно коли треба запустити скрейпінг у скрипті чи cron.</p>
-    <pre><code>npm install -g firecrawl-cli</code></pre>
-  </div>
-
-  <div class="mini-card">
-    <h4><a href="https://playwright.dev/" target="_blank">🎭 playwright-cli</a> <span class="stars-mini">пара до плагіна</span></h4>
-    <p>CLI до Playwright — швидкий запуск автотестів і скрейпінг скриптами без MCP. Для CI/CD або разових перевірок.</p>
-    <pre><code>npm install -g @playwright/cli</code></pre>
-  </div>
-
-  <h2 class="section-title" id="marketplaces">🌐 Маркетплейси для пошуку інших скілів</h2>
-  <p style="color: var(--text-dim); margin-bottom: 24px;">Цей посібник охоплює 16 топових інструментів. Якщо потрібно щось специфічне — ось де шукати далі.</p>
+  <h2 class="section-title" id="marketplaces">🌐 Маркетплейси для пошуку</h2>
+  <p style="color: var(--text-dim); margin-bottom: 24px; font-size: 1rem;">Якщо потрібне щось специфічне — ось де шукати далі.</p>
 
   <div class="resource-grid">
     <div class="resource-card">
       <div class="resource-card-title"><a href="https://github.com/hesreallyhim/awesome-claude-code" target="_blank">awesome-claude-code</a></div>
       <div class="resource-card-stars">⭐ 43 000</div>
-      <div class="resource-card-desc">Головний awesome-list для Claude Code. Куратовані плагіни, скіли, інтеграції, освітні ресурси. Першочерговий пункт пошуку.</div>
+      <div class="resource-card-desc">Головний awesome-list для Claude Code. Куратовані плагіни, скіли, інтеграції.</div>
     </div>
-
     <div class="resource-card">
       <div class="resource-card-title"><a href="https://github.com/punkpeye/awesome-mcp-servers" target="_blank">awesome-mcp-servers</a></div>
       <div class="resource-card-stars">⭐ 86 000</div>
-      <div class="resource-card-desc">Найбільший каталог MCP-серверів — сотні готових інтеграцій. Потрібен Notion, Slack, Jira чи свою СУБД? Шукайте тут.</div>
+      <div class="resource-card-desc">Найбільший каталог MCP-серверів — сотні готових інтеграцій.</div>
     </div>
-
     <div class="resource-card">
       <div class="resource-card-title"><a href="https://github.com/modelcontextprotocol/servers" target="_blank">modelcontextprotocol/servers</a></div>
       <div class="resource-card-stars">⭐ 85 000</div>
-      <div class="resource-card-desc">Офіційний реєстр MCP-серверів від команди протоколу. Найвища надійність і якість документації.</div>
+      <div class="resource-card-desc">Офіційний реєстр MCP-серверів. Найвища надійність.</div>
     </div>
-
     <div class="resource-card">
-      <div class="resource-card-title"><a href="https://github.com/VoltAgent/awesome-claude-code-subagents" target="_blank">awesome-claude-code-subagents</a></div>
+      <div class="resource-card-title"><a href="https://github.com/VoltAgent/awesome-claude-code-subagents" target="_blank">awesome-subagents</a></div>
       <div class="resource-card-stars">⭐ 19 000</div>
-      <div class="resource-card-desc">Список subagent-ів для Claude Code — спеціалізовані помічники під різні задачі. Корисно для multi-agent workflow.</div>
+      <div class="resource-card-desc">Subagents для multi-agent workflow.</div>
     </div>
-
     <div class="resource-card">
       <div class="resource-card-title"><a href="https://github.com/anthropics/claude-plugins-official" target="_blank">claude-plugins-official</a></div>
       <div class="resource-card-stars">⭐ 19 000</div>
-      <div class="resource-card-desc">Офіційний маркетплейс Anthropic. Найвища якість, але вибір вузький — лише розробницькі плагіни.</div>
+      <div class="resource-card-desc">Офіційний маркетплейс Anthropic. Найвища якість.</div>
     </div>
-
     <div class="resource-card">
-      <div class="resource-card-title"><a href="https://github.com/rohitg00/awesome-claude-code-toolkit" target="_blank">awesome-claude-code-toolkit</a></div>
+      <div class="resource-card-title"><a href="https://github.com/rohitg00/awesome-claude-code-toolkit" target="_blank">awesome-toolkit</a></div>
       <div class="resource-card-stars">⭐ 1 500</div>
-      <div class="resource-card-desc">Тулкіт зі скриптами, hooks, конфігами для Claude Code. Корисно для глибокого тюнінгу і нестандартних сценаріїв.</div>
+      <div class="resource-card-desc">Скрипти, hooks, конфіги для глибокого тюнінгу.</div>
     </div>
-
     <div class="resource-card">
       <div class="resource-card-title"><a href="https://github.com/daymade/claude-code-skills" target="_blank">daymade/claude-code-skills</a></div>
       <div class="resource-card-stars">⭐ 980</div>
-      <div class="resource-card-desc">Найбільший community-маркетплейс зі ~50 production-готовими скілами. Excel, GitHub, debugging, deep research.</div>
+      <div class="resource-card-desc">Найбільший community-маркетплейс зі ~50 скілами.</div>
     </div>
-
     <div class="resource-card">
-      <div class="resource-card-title"><a href="https://github.com/ccplugins/awesome-claude-code-plugins" target="_blank">ccplugins/awesome-claude-code-plugins</a></div>
+      <div class="resource-card-title"><a href="https://github.com/ccplugins/awesome-claude-code-plugins" target="_blank">awesome-plugins</a></div>
       <div class="resource-card-stars">⭐ 762</div>
-      <div class="resource-card-desc">Окремий awesome-list лише для плагінів. Менше, але більш сфокусований на packaged-плагінах.</div>
+      <div class="resource-card-desc">Окремий awesome-list лише для плагінів.</div>
     </div>
   </div>
 
-  <section class="intro">
+  <section class="intro" style="margin-top: 60px;">
     <h2>🛠️ Як встановити плагін?</h2>
-    <p>Встановлення складається з трьох простих кроків. Просто скопіюйте команди в чат з Claude Code:</p>
+    <p>Встановлення — три прості кроки. Скопіюйте команди в чат з Claude Code:</p>
     <div class="install-block">
       <div class="install-block-label">📥 Встановлення в три кроки</div>
 <pre><code># 1. Додати маркетплейс (один раз)
@@ -1164,34 +1176,33 @@ vercel login</code></pre>
 # 2. Встановити плагін
 /plugin install &lt;ім'я-плагіна&gt;
 
-# 3. Готово! Перевірити встановлені:
+# 3. Перевірити встановлені:
 /plugin list</code></pre>
     </div>
-    <p style="margin-top: 16px;">💡 Більшість плагінів від Anthropic вже доступні без додавання маркетплейсу — просто пишіть <code>/plugin install ім'я</code>.</p>
+    <p style="margin-top: 16px;">💡 Більшість плагінів від Anthropic вже доступні без додавання маркетплейсу — просто <code>/plugin install ім'я</code>.</p>
   </section>
-
 
   <section class="recommendation" id="recommendation">
     <h2>⚡ Рекомендований стек для початківця</h2>
-    <p style="color: var(--text-dim); margin-bottom: 24px;">Не намагайтесь поставити все одразу. Ось перевірений порядок:</p>
+    <p style="color: var(--text-dim); margin-bottom: 24px;">Не намагайтесь поставити все одразу. Перевірений порядок:</p>
     <ol>
-      <li><strong>Базовий мінімум:</strong> Claude Code + Superpowers + Anthropic Skills. Цього вистачить на 80% задач.</li>
-      <li><strong>CLI-інструменти:</strong> <code>gh</code>, <code>gws</code>, <code>vercel</code> — встановити глобально, авторизуватись.</li>
-      <li><strong>Для коду:</strong> code-review, frontend-design, claude-code-setup, skill-creator з офіційного маркетплейсу.</li>
+      <li><strong>Базовий мінімум:</strong> Claude Code + Superpowers + Anthropic Skills. 80% задач.</li>
+      <li><strong>CLI-інструменти:</strong> <code>gh</code>, <code>gws</code>, <code>vercel</code> — глобально, авторизуватись.</li>
+      <li><strong>Для коду:</strong> code-review, frontend-design, claude-code-setup, skill-creator.</li>
       <li><strong>Для веб-доступу:</strong> Firecrawl + Context7. Інтернет і свіжа документація.</li>
-      <li><strong>Для браузерної автоматизації:</strong> Playwright (тести, скрейпери) + Browser Harness (логіни, адмінки).</li>
-      <li><strong>Для пам'яті:</strong> Claude Memory. Щоб не пояснювати одне й те саме щоразу.</li>
-      <li><strong>Якщо робите інтерфейси:</strong> UI/UX Pro Max + Lazyweb + плагін design.</li>
+      <li><strong>Браузерна автоматизація:</strong> Playwright (тести/CI) + Browser Harness (логіни/адмінки).</li>
+      <li><strong>Памʼять:</strong> Claude Memory.</li>
+      <li><strong>Інтерфейси:</strong> UI/UX Pro Max + Lazyweb + плагін design.</li>
       <li><strong>Економія токенів:</strong> Caveman (увімкнути <code>full</code>).</li>
       <li><strong>Мобільний контроль:</strong> Telegram Supercharged.</li>
     </ol>
-    <p style="margin-top: 24px; color: var(--text-dim);">💡 Після встановлення запустіть <code>/claude-automation-recommender</code> зі скіла claude-code-setup — він проаналізує ваш конкретний проєкт і запропонує що ще додати.</p>
+    <p style="margin-top: 24px; color: var(--text-dim);">💡 Після встановлення запустіть <code>/claude-automation-recommender</code> зі скіла claude-code-setup.</p>
   </section>
 
   <footer>
     <p>📅 Дані актуальні станом на травень 2026</p>
-    <p style="margin-top: 8px;">Складено на основі робочої інсталяції TacERP</p>
-    <p style="margin-top: 16px; font-size: 0.8rem;">Кількість зірок може змінюватись — це показник популярності серед розробників на GitHub</p>
+    <p style="margin-top: 8px;">Складено на основі робочої інсталяції TacERP, дизайн покращено через lazyweb-design-improve</p>
+    <p style="margin-top: 16px; font-size: 0.78rem;">Кількість зірок може змінюватись — це показник популярності серед розробників на GitHub</p>
   </footer>
 
 </div>
